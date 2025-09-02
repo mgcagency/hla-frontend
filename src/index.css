@@ -1,0 +1,348 @@
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/inter/700.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.react-calendar__navigation__arrow {
+  display: none;
+}
+
+/* .react-calendar__month-view__days__day {
+  color: purple;
+} */
+
+.highlight {
+  background-color: yellow; /* Example style */
+  color: red; /* Example style */
+}
+
+/*  */
+
+.react-calendar__navigation__label {
+  font-family: "Inter", sans-serif;
+  color: #414652;
+  font-weight: 600;
+  font-size: medium;
+  margin-left: 10px;
+  margin-bottom: 5px;
+}
+
+.react-calendar__month-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.react-calendar__year-view__months__month {
+  margin-bottom: 10px;
+}
+
+.react-calendar__navigation__label__month__item:hover {
+  background-color: #f0f7ff;
+}
+
+.react-calendar__month-view__weekdays {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.react-calendar__month-view__weekdays__weekday,
+.react-calendar__month-view__weekdays__weekday abbr {
+  text-decoration: none;
+  font-weight: 600;
+  text-align: center;
+  font-family: "Inter", sans-serif;
+  color: "#333333";
+  /* margin-bottom: 4px; */
+  font-size: small;
+}
+
+.react-calendar__month-view__weekdays__weekday,
+.react-calendar__month-view__days__day {
+  flex: 1 0 calc(14.2857% - 4px);
+  max-width: calc(14.2857% - 4px);
+  margin: 2px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.react-calendar__month-view__days__day {
+  border-radius: 50%;
+  margin: 2px;
+  width: 30px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* transition: background-color 0.1s; */
+  color: #666666;
+  font-size: small;
+  box-sizing: border-box;
+}
+
+.react-calendar__tile:hover {
+  color: black;
+  background-color: #f0f7ff;
+}
+
+.react-calendar__tile--highlight-monday {
+  color: #ffffff;
+  background-color: #3a6ef3;
+}
+
+.react-calendar__tile--highlight-tuesday {
+  color: #ffffff;
+  background-color: #ffc065;
+}
+
+.react-calendar__tile--highlight-wednesday {
+  color: #ffffff;
+  background-color: #f76060;
+  /* background-color: #c5aef3; */
+}
+
+.react-calendar__tile--highlight-thursday {
+  color: #ffffff;
+  background-color: #9297ff;
+}
+
+.react-calendar__tile--highlight-friday {
+  color: #ffffff;
+  background-color: #ff9c9c;
+}
+
+.react-calendar__tile--highlight-saturday {
+  color: #ffffff;
+  background-color: #ede37f;
+}
+
+.react-calendar__tile--highlight-sunday {
+  color: #ffffff;
+  background-color: #95d829;
+}
+
+.react-calendar__month-view__days__day {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.register-scrollbar {
+  /* width: 100%; */
+  padding-right: 15px;
+}
+
+.register-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.register-scrollbar::-webkit-scrollbar-track {
+  background: #eeeeee;
+}
+
+.register-scrollbar::-webkit-scrollbar-thumb {
+  background: #c1914f;
+  border-radius: 5px;
+}
+
+.register-scrollbar2 {
+  /* width: 100%; */
+  padding-right: 15px;
+}
+
+.register-scrollbar2::-webkit-scrollbar {
+  width: 4px;
+}
+
+.register-scrollbar2::-webkit-scrollbar-track {
+  background: #eeeeee;
+}
+
+.register-scrollbar2::-webkit-scrollbar-thumb {
+  background: #0c3e81;
+  border-radius: 5px;
+}
+
+.register-scrollbar3 {
+  /* width: 100%; */
+  padding-right: 15px;
+}
+
+.register-scrollbar3::-webkit-scrollbar {
+  width: 10px;
+}
+
+.register-scrollbar2::-webkit-scrollbar-track {
+  background: #eeeeee;
+}
+
+.register-scrollbar3::-webkit-scrollbar-thumb {
+  background: #0c3e81;
+  /* border-radius: 2px; */
+}
+
+.no-scroll {
+  overflow: hidden;
+}
+
+/* Custom styles for the Time Picker */
+.MuiPickersLayout-root {
+  width: 460px;
+}
+
+.MuiTimePickerToolbar-hourMinuteLabel {
+  display: flex; /* Ensure the buttons are aligned properly */
+  margin-bottom: 10px;
+}
+
+.MuiTimePickerToolbar-hourMinuteLabel button:nth-child(1) {
+  padding: 8px;
+  padding-right: 10px;
+  padding-left: 10px;
+  background-color: #c1914f1a;
+  /* Background for hour */
+}
+.MuiTimePickerToolbar-hourMinuteLabel button:nth-child(1) .MuiTypography-root {
+  color: #21005d; /* Text color for hour */
+}
+.MuiTimePickerToolbar-separator {
+  padding-bottom: 8px;
+
+  /* Background for hour */
+}
+.MuiTimePickerToolbar-separator.MuiTypography-root {
+  color: #1d1b20; /* Text color for colon */
+}
+.MuiTimePickerToolbar-hourMinuteLabel button:nth-child(3) {
+  padding: 8px;
+  padding-right: 10px;
+  padding-left: 10px;
+  background-color: #5f2b381a; /* Background for minute */
+}
+
+.MuiTimePickerToolbar-hourMinuteLabel button:nth-child(3) .MuiTypography-root {
+  color: #1d1b20; /* Text color for minute */
+}
+
+.MuiTimePickerToolbar-ampmSelection {
+  display: flex;
+}
+
+.MuiTimePickerToolbar-ampmSelection button:nth-child(1) {
+  padding: 4px;
+  padding-right: 28px;
+  padding-left: 28px;
+  background-color: #5f2b38; /* Background for AM */
+  border: 2px solid #5f2b38;
+  border-right: none;
+  border-top-right-radius: 0%;
+  border-bottom-right-radius: 0%;
+}
+
+.MuiTimePickerToolbar-ampmSelection button:nth-child(1) .MuiTypography-root {
+  color: white; /* Text color for AM */
+}
+
+.MuiTimePickerToolbar-ampmSelection button:nth-child(2) {
+  padding: 4px;
+  padding-right: 28px;
+  padding-left: 28px;
+  background-color: #f5f1f1; /* Background for PM */
+  border: 2px solid #5f2b38;
+  border-left: none;
+  border-top-left-radius: 0%;
+  border-bottom-left-radius: 0%;
+}
+
+.MuiTimePickerToolbar-ampmSelection button:nth-child(2) .MuiTypography-root {
+  color: #49454f; /* Text color for PM */
+}
+
+.MuiClock-root {
+  padding-left: 40px;
+}
+
+.MuiClock-squareMask {
+  background-color: #c1914f1a;
+  border-radius: 100%;
+}
+
+.MuiClock-pin {
+  background-color: #5f2b38 !important; /* Color for clock pin */
+}
+
+.MuiClockPointer-root {
+  background-color: #5f2b38 !important;
+}
+
+.MuiClockPointer-thumb {
+  border-color: #5f2b38 !important; /* Color for clock pointer thumb */
+}
+
+.MuiPickersArrowSwitcher-previousIconButton,
+.MuiPickersArrowSwitcher-nextIconButton {
+  display: none !important;
+}
+
+.MuiDialogActions-root .MuiButtonBase-root {
+  display: none !important;
+}
+
+.custom-time-picker .MuiPickersToolbar-toolbarTitle {
+  color: #ff5722 !important; /* Custom color for the toolbar title */
+  font-size: 1.5rem; /* Custom font size for the toolbar title */
+}
+
+.css-1hbyad5-MuiTypography-root {
+  color: #49454f !important;
+  font-size: small !important;
+  padding-left: 5px;
+  font-weight: 600;
+}
+
+.canvasjs-chart-credit {
+  display: none;
+}
+
+.custom-chart-container .canvasjs-chart-legend .canvasjs-legend-item {
+  margin-bottom: 10px; /* Add space between legend items */
+}
+
+/* --------------Phone Input Styling----------------- */
+.phone-input-container {
+  width: 100%;
+}
+
+.phone-input {
+  width: 100% !important;
+  padding: 0.5rem;
+  border: none !important; /* Tailwind's border-gray-300 */
+  border-radius: 0.375rem !important; /* Tailwind's rounded-md */
+  box-shadow: none !important; /* Tailwind's shadow-md */
+  outline: none !important;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+
+
+.phone-input:focus {
+  border-color: #60a5fa; /* Tailwind's border-blue-400 */
+  box-shadow: 0 0 0 1px #3b82f6; /* Tailwind's ring-blue-500 */
+}
+
+.phone-input-button {
+  border: none !important;
+  background: white !important;
+  padding: 0 !important;
+  margin: 0 !important;
+
+}
+
+
+
