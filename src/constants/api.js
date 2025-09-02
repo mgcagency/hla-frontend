@@ -1,5 +1,5 @@
 // export const BACKEND_URL = "https://hla-backend.onrender.com/api/"
-export const BACKEND_URL = "https://ardleanursery.co.uk/api/"
+export const BACKEND_URL = "https://hla-backend.resolveddevelopment.co.uk/api/"
 // export const BACKEND_URL = "http://localhost:4000/api/"
 // export const SOCKET_BACKEND_URL = "http://localhost:4000"
-export const SOCKET_BACKEND_URL = "https://ardleanursery.co.uk"
+export const SOCKET_BACKEND_URL = "https://hla-backend.resolveddevelopment.co.uk"
