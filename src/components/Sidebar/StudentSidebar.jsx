@@ -8,11 +8,14 @@ export default function StudentSidebar() {
     <div className="flex flex-col h-screen mx-4">
       {/* Logo Div */}
       <div className="flex-1 flex justify-center bg-white/80 w-32 h-32 ml-4 mt-4 items-center border-b-2 border-customWhite10 ">
+        <a href="/student/dashboard">
+        
         <img
           src={IMAGES.main_logo}
           alt="Academy Logo"
           className="w-[100px] h-[100px]"
         />
+        </a>
       </div>
 
       {/* Sidebar Links Div  */}

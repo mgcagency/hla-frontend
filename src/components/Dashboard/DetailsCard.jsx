@@ -1,9 +1,10 @@
 import React from "react";
 import Loader from "../Loader/Loader";
 
-export default function DetailsCard({ icon, label, value, loading }) {
+export default function DetailsCard({ icon, label, value, loading , link}) {
   return (
     <>
+    <a href={link} className="flex flex-1">
       <div className="flex flex-1 px-5 mr-5 backdrop-blur-sm opacity-90 flex-col h-[150px] bg-blue-50 md:bg-customWhite55 rounded-2xl  border-[1.5px]  border-customDetailCardBorderColor shadow-customDetailCardShadow">
         {loading ? (
           <div className="flex justify-center items-center h-full">
@@ -27,6 +28,7 @@ export default function DetailsCard({ icon, label, value, loading }) {
           </>
         )}
       </div>
+      </a>
     </>
   );
 }

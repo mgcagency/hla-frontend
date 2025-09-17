@@ -39,6 +39,7 @@ export default function ParentPage() {
 
   const { toggleOverlay } = useOverLay();
   const { parents, refetch } = useGetUsers();
+  const [selectedIds, setSelectedIds] = useState([]);
 
   const [loading, setLoading] = useState(true);
 
@@ -122,17 +123,26 @@ export default function ParentPage() {
     toggleOverlay();
   };
 
-  // const toggleCheckbox = (id) => {
-  //   setParents((prevParents) =>
-  //     prevParents.map((parent) =>
-  //       parent.id === id ? { ...parent, checked: !parent.checked } : parent
-  //     )
-  //   );
-  // };
-
-  const toggleAllCheckboxes = () => {
-    setAllChecked(!allChecked);
+ const toggleCheckbox = (id) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((pid) => pid !== id) : [...prev, id]
+    );
   };
+
+  // ✅ Toggle all checkboxes
+  const toggleAllCheckboxes = () => {
+    if (allChecked) {
+      setSelectedIds([]);
+      setAllChecked(false);
+    } else {
+      setSelectedIds(filteredParents.map((p) => p._id));
+      setAllChecked(true);
+    }
+  };
+
+  // const toggleAllCheckboxes = () => {
+  //   setAllChecked(!allChecked);
+  // };
 
   return (
     // Full Screen
@@ -236,9 +246,10 @@ export default function ParentPage() {
                       <ParentDetailsCard
                         key={parent._id}
                         parent={parent}
-                        // toggleCheckbox={toggleCheckbox}
+                        toggleCheckbox={toggleCheckbox}
                         toggleEditModal={toggleEditModal}
                         toggleDeletedPopup={toggleDeletedPopup}
+                        checked={selectedIds.includes(parent._id)}
                       />
                     ))}
                   </div>

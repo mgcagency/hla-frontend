@@ -236,10 +236,10 @@ export default function StudentChatsPage() {
                       </p>
                     </div>
                   </div>
-                  <div className="flex flex-row space-x-3 items-center">
+                  {/* <div className="flex flex-row space-x-3 items-center">
                     <FiPhone size={18} />
                     <SlOptionsVertical size={16} />
-                  </div>
+                  </div> */}
                 </div>
               </div>
 

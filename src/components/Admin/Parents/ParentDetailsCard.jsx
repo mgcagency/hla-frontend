@@ -48,7 +48,6 @@ export default function ParentDetailsCard({
   const handleImageLoad = () => {
     setImageLoading(false); 
   };
-
   return (
     // Container Div
     <div className="flex flex-row w-full items-center p-3 text-xs lg:text-sm text-customStudentCardTextColor shadow-md">
@@ -57,7 +56,7 @@ export default function ParentDetailsCard({
         className={`flex-1 cursor-pointer ${
           checked ? "text-customMaroon" : "text-customLightGray"
         }`}
-        onClick={() => toggleCheckbox(id)}
+        onClick={() => toggleCheckbox(parent?._id )}
       >
         {checked ? (
           <MdOutlineCheckBox size={20} />

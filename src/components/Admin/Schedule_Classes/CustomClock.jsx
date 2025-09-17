@@ -35,7 +35,7 @@ export default function CustomClock({ onConfirm, onCancel }) {
     setEndTime(value.format("hh:mm A"));
     onConfirm(startTime, value.format("hh:mm A"));
   };
-
+console.log('parems',localeText)
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs} localeText={localeText}>
       <StaticTimePicker

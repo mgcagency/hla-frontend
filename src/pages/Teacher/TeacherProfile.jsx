@@ -12,6 +12,8 @@ import { ToastContainer, toast } from "react-toastify"
 export default function TeacherProfilePage() {
   const navigate = useNavigate();
   const [imageLoading, setImageLoading] = useState(true);
+  const [logoutConfirm, setLogoutConfirm] = useState(false);
+  
   const { disconnectSocket } = useSocket();
   const {refetch} = useGetUsers(); 
 
@@ -76,9 +78,18 @@ export default function TeacherProfilePage() {
             <p className="mb-3 ml-2">Account</p>
             <div>
               {profileLinks.map((item, index) => (
+                // <div
+                //   key={index}
+                //   onClick={item.label === "Log Out" ? handleLogout : null}
+                //   className="flex items-center space-x-3 rounded-lg hover:bg-slate-200 p-2 cursor-pointer"
+                // >
                 <div
                   key={index}
-                  onClick={item.label === "Log Out" ? handleLogout : null}
+                  onClick={
+                    item.label === "Log Out"
+                      ? () => setLogoutConfirm(true) // <-- open confirmation
+                      : null
+                  }
                   className="flex items-center space-x-3 rounded-lg hover:bg-slate-200 p-2 cursor-pointer"
                 >
                   <div className={`${item.icon_bg} p-3 rounded-lg`}>
@@ -88,13 +99,53 @@ export default function TeacherProfilePage() {
                       className="w-4 h-4"
                     />
                   </div>
-                  <p className="text-customGray font-medium text-sm">
+                  {/* <p className="text-customGray font-medium text-sm">
                     {item.label}
-                  </p>
+                  </p> */}
+
+                  {item.path ? (
+                    <a
+                      href={item.path}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-customGray font-medium text-sm"
+                    >
+                      {item.label}
+                    </a>
+                  ) : (
+                    <p className="text-customGray font-medium text-sm">{item.label}</p>
+                  )}
                 </div>
               ))}
             </div>
           </div>
+           {/* Logout Confirmation Popup */}
+        {logoutConfirm && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
+            <div className="bg-white rounded-2xl p-6 w-80 shadow-lg text-center">
+              <h2 className="text-lg font-semibold text-customDarkBlue">
+                Confirm Logout
+              </h2>
+              <p className="text-sm text-gray-600 mt-2">
+                Are you sure you want to log out?
+              </p>
+              <div className="flex justify-center space-x-4 mt-6">
+                <button
+                  onClick={() => setLogoutConfirm(false)}
+                  className="px-4 py-2 rounded-lg bg-gray-300 hover:bg-gray-400 text-sm"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className="px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white text-sm"
+                >
+                  Log Out
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
         </div>
       </div>
     </>

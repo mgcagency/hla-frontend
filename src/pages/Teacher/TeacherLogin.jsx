@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { IMAGES } from "../../assets";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loader from "../../components/Loader/Loader";
@@ -49,8 +49,8 @@ export default function TeacherLogin() {
       }
       setLoader(true);
 
-      const verifyresp = await verifyCode({ email, code });
-      if (verifyresp.success) {
+      // const verifyresp = await verifyCode({ email, code });
+      // if (verifyresp.success) {
         const response = await login({ email, password });
         if (response === "big error") {
           toast.error("Login failed. Please check your credentials.");
@@ -72,10 +72,10 @@ export default function TeacherLogin() {
             setLoader(true);
           }
         }
-      }else{
-        toast.error("Invalid Code!");
-        setLoader(true);
-      }
+      // }else{
+      //   toast.error("Invalid Code!");
+      //   setLoader(true);
+      // }
     } catch (error) {
       console.log("Error: ", error);
       toast.error("Login failed. Please check your credentials.");
@@ -157,10 +157,12 @@ export default function TeacherLogin() {
                   </div>
 
                   {/* Forget Password */}
-                  <div>
-                    <p className="text-customYellow  font-medium text-xs hover:underline cursor-pointer">
-                      Forgot Password ?
-                    </p>
+                   <div>
+                    <Link to="/forgot-password">
+                        <p className="text-customYellow font-medium text-xs hover:underline cursor-pointer">
+                            Forgot Password ?
+                        </p>
+                    </Link>
                   </div>
                 </div>
 
@@ -171,7 +173,7 @@ export default function TeacherLogin() {
                   ) : (
                     <button
                       type="submit"
-                      onClick={handleSendCodeClick}
+                      onClick={handleLoginClick}
                       className="bg-customMaroon w-7/10 rounded-3xl py-3"
                     >
                       <p className=" text-white font-medium">Log In</p>
@@ -223,7 +225,7 @@ export default function TeacherLogin() {
             className="h-[150px] w-[150px] lg:h-[230px] lg:w-[230px]"
           />
         </div>
-      </div>
+      </div> 
     </div>
   );
 }

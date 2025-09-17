@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { IMAGES } from "../../assets";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loader from "../../components/Loader/Loader";
@@ -50,8 +50,8 @@ export default function ParentsLogin() {
         return;
       }
       setLoader(true);
-      const verifyresp = await verifyCode({ email, code });
-      if (verifyresp.success) {
+      // const verifyresp = await verifyCode({ email, code });
+      // if (verifyresp.success) {
         const response = await login({ email, password });
         if (response === "big error") {
           toast.error("Login failed. Please check your credentials.");
@@ -73,9 +73,9 @@ export default function ParentsLogin() {
             setLoader(true);
           }
         }
-      }else{
-        toast.error("Invalid Code!");
-      }
+      // }else{
+      //   toast.error("Invalid Code!");
+      // }
     } catch (error) {
       console.log("Error: ", error);
       toast.error("Login failed. Please check your credentials.");
@@ -158,9 +158,11 @@ export default function ParentsLogin() {
 
                   {/* Forget Password */}
                   <div>
-                    <p className="text-customYellow  font-medium text-xs hover:underline cursor-pointer">
-                      Forgot Password ?
-                    </p>
+                    <Link to="/forgot-password">
+                        <p className="text-customYellow font-medium text-xs hover:underline cursor-pointer">
+                            Forgot Password ?
+                        </p>
+                    </Link>
                   </div>
                 </div>
 
@@ -171,7 +173,7 @@ export default function ParentsLogin() {
                   ) : (
                     <button
                       type="submit"
-                      onClick={handleSendCodeClick}
+                      onClick={handleLoginClick}
                       className="bg-customMaroon w-7/10 rounded-3xl py-3"
                     >
                       <p className=" text-white font-medium">Log In</p>

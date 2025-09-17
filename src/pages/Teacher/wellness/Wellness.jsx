@@ -51,10 +51,18 @@ const Wellness = () => {
   }, [studentModal]);
 
   // Filter students based on search query
-  const filteredStudents = data;
+  // const filteredStudents = data;
   // const filteredStudents = data?.filter((student) =>
   //   student?.user?.name.toLowerCase().includes(searchQuery.toLowerCase())
   // );
+  const filteredStudents = data
+  ?.map((item) => ({
+    ...item,
+    submissions: item.submissions.filter((sub) =>
+      sub?.user?.name?.toLowerCase().includes(searchQuery.toLowerCase())
+    ),
+  }))
+  .filter((item) => item.submissions.length > 0);
 
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -136,17 +144,35 @@ const Wellness = () => {
                     <p>No Data Present</p>
                   </div>
                 ) : (
-                  <div>
-                    {currentStudents.map((student) => {
-                      return (
-                        <StudentDetailsCard
-                          data={student}
+                  // <div>
+                  //   {currentStudents.map((student) => {
+                  //     return (
+                  //       <StudentDetailsCard
+                  //         data={student}
+                  //         key={student._id}
+                  //         assignedClasses={[]}
+                  //         student={student.submissions[0]}
+                  //       />
+                  //     );
+                  //   })}
+                  // </div>
+                   <div>
+                      {currentStudents.map((item) =>
+                       item.submissions?.map((student) => {
+                         const assignedClasses = classes.filter(
+                             (classs) => classs.student_id._id === student._id
+                            );
+                  
+                       return (
+                            <StudentDetailsCard
                           key={student._id}
-                          assignedClasses={[]}
-                          student={student.submissions[0]}
-                        />
+                           data={student}
+                              student={student.user}
+                             assignedClasses={assignedClasses}
+                     />
                       );
-                    })}
+                       })
+                    )}
                   </div>
                 ))}
             </div>

@@ -16,7 +16,7 @@ export default function GlobalLayoutAdmin() {
   return (
     <div>
       {/* Full Screen Div  */}
-      <div className={` w-auto h-auto flex flex-row bg-custom-gradient2 `}>
+      <div className={` w-auto h-auto flex flex-row bg-custom-gradient `}>
         {/* Menu Icon Div */}
         <div
           className={`absolute md:hidden bg-custom-gradient top-4 ${
