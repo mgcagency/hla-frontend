@@ -3,7 +3,6 @@ import { BACKEND_URL } from "../constants/api"
 
 
 export const login = async (data) => {
-    console.log('login',data);
     try {const response = await axios.post(
         `${BACKEND_URL}user/login`,
         data
