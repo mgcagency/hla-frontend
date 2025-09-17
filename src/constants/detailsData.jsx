@@ -13,6 +13,7 @@ export const getDetailsData = ({users, teachers, students, parents}) => {
     ),
     label: "Teachers",
     value: teachers.length,
+    link: "/admin/teachers"
   },
   {
     icon: (
@@ -20,6 +21,8 @@ export const getDetailsData = ({users, teachers, students, parents}) => {
     ),
     label: "Students",
     value: students.length,
+    link: "/admin/students"
+
   },
   {
     icon: (
@@ -27,5 +30,6 @@ export const getDetailsData = ({users, teachers, students, parents}) => {
     ),
     label: "Parents",
     value: parents.length,
+    link: "/admin/parents"
   },
 ]};

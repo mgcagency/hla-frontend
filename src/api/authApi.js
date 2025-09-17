@@ -52,3 +52,20 @@ export const verifyCode = async (data) => {
         return "big error"
     }
 }
+export const forgotPassword = async (data) => {
+  try {
+    const response = await axios.post(
+      `${BACKEND_URL}user/send/new-password`, 
+      data
+    );
+    console.log("response",response)
+
+    const result = response;
+    console.log(result);
+    return result;
+  } catch (err) {
+    console.log(err.response?.data?.message || "Something went wrong");
+    const msg =err.response?.data?.message || "Something went wrong";
+    return msg;
+  }
+};

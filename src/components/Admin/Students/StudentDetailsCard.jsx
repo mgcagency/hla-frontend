@@ -64,7 +64,7 @@ export default function StudentDetailsCard({
         className={`flex-1 cursor-pointer ${
           checked ? "text-customMaroon" : "text-customLightGray"
         }`}
-        onClick={() => toggleCheckbox(id)}
+        onClick={() => toggleCheckbox(student?._id)}
       >
         {checked ? (
           <MdOutlineCheckBox size={20} />

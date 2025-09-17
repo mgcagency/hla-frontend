@@ -51,6 +51,9 @@ import TMonthlyPlan from "./pages/Teacher/monthlyPlan/MonthlyPlan";
 
 import TWellness from "./pages/Teacher/wellness/Wellness";
 import WellnessFrom from "./pages/Teacher/wellness/WellnessFrom";
+import PrivacyPolicy from "./pages/Common/PrivacyPolicy";
+import TermsAndConditions from "./pages/Common/TermsConditions";
+import ForgotPassword from "./pages/Common/ForgotPassword";
 
 export const routes = [
   {
@@ -233,4 +236,17 @@ export const routes = [
     path: "/parents-login",
     element: <ParentsLogin />,
   },
+  {
+    path: "/privacy-policy",
+    element: <PrivacyPolicy />,
+  },
+  {
+    path: "/terms-and-conditions",
+    element: <TermsAndConditions />,
+  },
+  {
+    path: "/forgot-password",
+    element: <ForgotPassword />,
+  },
+  
 ];

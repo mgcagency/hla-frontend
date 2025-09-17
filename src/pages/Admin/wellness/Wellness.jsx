@@ -50,10 +50,21 @@ const Wellness = () => {
   }, [studentModal]);
 
   // Filter students based on search query
-  const filteredStudents = data;
+  // const filteredStudents = data;
   // const filteredStudents = data?.filter((student) =>
   //   student?.user?.name.toLowerCase().includes(searchQuery.toLowerCase())
   // );
+  const filteredStudents = data
+  ?.map((item) => ({
+    ...item,
+    submissions: item.submissions.filter((sub) =>
+      sub?.user?.name?.toLowerCase().includes(searchQuery.toLowerCase())
+    ),
+  }))
+  .filter((item) => item.submissions.length > 0);
+
+console.log("filteredStudents", filteredStudents);
+  console.log('filteredStudents', filteredStudents);
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
@@ -193,7 +204,7 @@ const Wellness = () => {
             </div>
 
             {/* Table  */}
-            <div>
+            {/* <div>
               {loading && (
                 <div className="flex h-40 justify-center items-center">
                   <Loader />
@@ -221,7 +232,25 @@ const Wellness = () => {
                     })}
                   </div>
                 ))}
-            </div>
+            </div> */}
+             <div>
+                  {currentStudents.map((item) =>
+                    item.submissions?.map((student) => {
+                      const assignedClasses = classes.filter(
+                        (classs) => classs.student_id._id === student._id
+                      );
+
+                      return (
+                        <StudentDetailsCard
+                          key={student._id}
+                          data={student}
+                          student={student.user}
+                          assignedClasses={[]}
+                        />
+                      );
+                    })
+                  )}
+                </div>
 
             {/* Prev & Next Buttons  */}
             <div className="flex flex-row items-center text-customBlue font-sans justify-between p-3 px-4 shadow-md">

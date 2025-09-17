@@ -25,7 +25,18 @@ const MonthlyPlan = () => {
   };
 
   // Filter students based on search query
-  const filteredStudents = data;
+  // const filteredStudents = data;
+ const filteredStudents = data
+    .map((plan) => {
+      const matchedSubmissions = plan.submissions?.filter((submission) =>
+        (submission.user?.name || "")
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase())
+      );
+      return { ...plan, submissions: matchedSubmissions || [] };
+    })
+    .filter((plan) => plan.submissions.length > 0);
+
 
   const [currentPage, setCurrentPage] = useState(1);
   const studentsPerPage = 6;
@@ -172,16 +183,16 @@ const MonthlyPlan = () => {
                   </div>
                 ) : (
                   <div>
-                    {currentStudents[1]?.submissions.map((student) => {
-                      return (
-                        <StudentDetailsCard
-                          data={student}
-                          key={student._id}
-                          assignedClasses={[]}
-                          student={student.user}
-                        />
-                      );
-                    })}
+                    {currentStudents.map((plan) =>
+  plan.submissions?.map((student) => (
+    <StudentDetailsCard
+      data={student}
+      key={student._id}
+      assignedClasses={[]}
+      student={student.user}
+    />
+  ))
+)}
                   </div>
                 ))}
             </div>

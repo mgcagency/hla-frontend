@@ -40,6 +40,8 @@ export default function TeacherPage() {
   const { fetchClasses, classes } = useGetClasses();
   const { user } = useUser();
   // const [teachers, setTeachers] = useState(teacherDetails);
+  const [selectedIds, setSelectedIds] = useState([]);
+  
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -121,6 +123,24 @@ export default function TeacherPage() {
     toggleOverlay();
   };
 
+
+   const toggleCheckbox = (id) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((pid) => pid !== id) : [...prev, id]
+    );
+  };
+
+  // ✅ Toggle all checkboxes
+  const toggleAllCheckboxes = () => {
+    if (allChecked) {
+      setSelectedIds([]);
+      setAllChecked(false);
+    } else {
+      setSelectedIds(filterTeachers.map((p) => p._id));
+      setAllChecked(true);
+    }
+  };
+
   // const toggleCheckbox = (id) => {
   //   setTeachers((prevTeachers) =>
   //     prevTeachers.map((teacher) =>
@@ -129,9 +149,9 @@ export default function TeacherPage() {
   //   );
   // };
 
-  const toggleAllCheckboxes = () => {
-    setAllChecked(!allChecked);
-  };
+  // const toggleAllCheckboxes = () => {
+  //   setAllChecked(!allChecked);
+  // };
 
   return (
     // Full Screen
@@ -245,6 +265,8 @@ export default function TeacherPage() {
                         // checked={teacher.checked}
                         // toggleCheckbox={toggleCheckbox}
                         toggleDeletedPopup={toggleDeletedPopup}
+                        toggleCheckbox={toggleCheckbox}
+                        checked={selectedIds.includes(teacher._id)}
                       />
                     );
                   })}

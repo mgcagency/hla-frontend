@@ -17,24 +17,19 @@ import TeacherTimetableCard from "../../components/Teacher/TeacherTimetableCard"
 import { giveBgColor } from "../../utils/BgColor";
 import { statusColor } from "../../utils/StatusColor";
 import { giveCardColors } from "../../utils/CardColors";
-import { useGetUsers } from "../../contexts/GetUsersContext";
 
 export default function TeacherDashboard() {
   const [selecetedClass, setSelectedClass] = useState(null);
-  const [popupState, setPopupState] = useState({ id: null, type: null, classs:null });
-  const [popup2State, setPopup2State] = useState({
-    id: null,
-    type: null,
-    classs: null,
-  });
+  const [popupState, setPopupState] = useState({ id: null, type: null, classs: null });
+  const [popup2State, setPopup2State] = useState({ id: null, type: null, classs: null });
   const [reviewModal, setReviewModal] = useState(false);
   const [reviewSubmittedPopup, setReviewSubmittedPopup] = useState(false);
   const [reviewCompleted, setReviewCompleted] = useState(false);
-
   const [teacher_classes, setTeacherClasses] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [showAllCompletedModal, setShowAllCompletedModal] = useState(false);
 
-  const { toggleOverlay, isOverlayEnable } = useOverLay();
+  const { toggleOverlay } = useOverLay();
   const { classes, getClassesByUserId } = useGetClasses();
   const { user } = useUser();
 
@@ -47,18 +42,10 @@ export default function TeacherDashboard() {
     getClasses();
   }, [reviewSubmittedPopup, reviewCompleted]);
 
-  // console.log("classes", classes);
-  // console.log("teacher_classes: ", teacher_classes)
-
-  const compClasses = teacher_classes?.filter(
-    (cls) => cls.status === "Completed"
-  );
+  const compClasses = teacher_classes?.filter(cls => cls.status === "Completed");
 
   const classesByDay = groupClassesByDay(teacher_classes);
-
-  const selectedDay = selectedDate.toLocaleDateString("en-US", {
-    weekday: "long",
-  });
+  const selectedDay = selectedDate.toLocaleDateString("en-US", { weekday: "long" });
   const selectedDayClasses = classesByDay[selectedDay] || [];
 
   const toggleReviewModal = (classs) => {
@@ -82,7 +69,7 @@ export default function TeacherDashboard() {
   };
 
   const handleCard2Click = (id, status, classs) => {
-    if (status !== undefined ) return;
+    if (status !== undefined) return;
     setPopup2State({ id, type: status, classs });
     toggleOverlay();
   };
@@ -92,63 +79,41 @@ export default function TeacherDashboard() {
     toggleOverlay();
   };
 
-  const isPopupOpen =
-    reviewModal !== false ||
-    popupState.type !== null ||
-    popup2State.type !== null;
+  const isPopupOpen = reviewModal !== false || popupState.type !== null || popup2State.type !== null;
 
   return (
     <>
       {reviewModal && <div className="bg-black fixed inset-0 opacity-50"></div>}
-      <div
-        className={`flex flex-col pt-2 rounded-tl-3xl bg-white rounded-bl-3xl h-full w-full space-y-4`}
-      >
+
+      <div className="flex flex-col pt-2 rounded-tl-3xl bg-white rounded-bl-3xl h-full w-full space-y-4">
         <TeacherNavbar name={user?.name} img={user?.photo} />
 
-        {/* Main Page  */}
+        {/* Main Page */}
         <div className="flex flex-col lg:flex-row gap-x-4 px-10 text-customGray font-medium text-lg">
-          {/* Timetable  */}
+          {/* Timetable */}
           <div className="flex-[2] mr-10 ">
             <p className="mb-4">Today's Timetable</p>
-            {popupState.type !== null &&
-              popupState.type !== "On Going" &&
-              popupState.type !== "Completed" && (
-                <ClassNotStartedPopup
-                  toggleFunc={closePopup}
-                  classs={popupState.classs}
-                />
-              )}
-            {popupState.type === "On Going" && (
-              <StartClassPopup
-                toggleFunc={closePopup}
-                classs={popupState.classs}
-              />
-            )}
 
-            <table className="w-full border-collapse text-xs text-customDarkerBlue ">
+            {popupState.type !== null && popupState.type !== "On Going" && popupState.type !== "Completed" && (
+              <ClassNotStartedPopup toggleFunc={closePopup} classs={popupState.classs} />
+            )}
+            {popupState.type === "On Going" && <StartClassPopup toggleFunc={closePopup} classs={popupState.classs} />}
+
+            <table className="w-full border-collapse text-xs text-customDarkerBlue">
               <tbody>
                 {teacherTimetableData.map((item, index) => {
-                  const classForTime = selectedDayClasses.find(
-                    (cls) => cls.startTime === item.time
-                  );
+                  const classForTime = selectedDayClasses.find(cls => cls.startTime === item.time);
                   return (
                     <tr key={index}>
                       <td
                         style={{ width: "8%" }}
-                        className={`pb-4 border-r border-gray-300 ${
-                          classForTime ? "" : "pb-4"
-                        } align-top`}
+                        className={`pb-4 border-r border-gray-300 ${classForTime ? "" : "pb-4"} align-top`}
                       >
                         {item.time}
                       </td>
-                      <td
-                        style={{ width: "90%" }}
-                        className={`${classForTime ? "" : "pb-4 "}`}
-                      >
+                      <td style={{ width: "90%" }} className={`${classForTime ? "" : "pb-4 "}`}>
                         <hr
-                          className={`w-full border-t-2 border-dashed border-gray-200 ${
-                            classForTime ? "" : "mt-[-8px]"
-                          }`}
+                          className={`w-full border-t-2 border-dashed border-gray-200 ${classForTime ? "" : "mt-[-8px]"}`}
                         />
                         {classForTime ? (
                           <TeacherTimetableCard
@@ -170,18 +135,22 @@ export default function TeacherDashboard() {
             </table>
           </div>
 
-          {/* right div  */}
-          <div className="flex-1 ">
+          {/* Right Panel */}
+          <div className="flex-1">
             <div className="flex items-center justify-center">
               <TeacherCustomCalendar onDateChange={setSelectedDate} />
             </div>
-            {/* Completed Classes Div  */}
-            <div className=" mt-8 p-2">
+
+            {/* Completed Classes */}
+            <div className="mt-8 p-2">
               <div className="flex flex-row items-center justify-between mb-2">
-                <p className="text-base font-medium font-sans">
-                  Completed Classes
-                </p>
-                <p className="text-xs text-customYellow hover:underline cursor-pointer">
+                <p className="text-base font-medium font-sans">Completed Classes</p>
+
+                {/* See All */}
+                <p
+                  className="text-xs text-customYellow hover:underline cursor-pointer"
+                  onClick={() => setShowAllCompletedModal(true)}
+                >
                   See all
                 </p>
               </div>
@@ -189,12 +158,10 @@ export default function TeacherDashboard() {
               <div className="h-[230px] overflow-y-auto register-scrollbar space-y-4 mr-2 ">
                 {compClasses.length === 0 ? (
                   <div className="flex items-center justify-center h-32">
-                    <p className="text-sm text-customLightGray">
-                      No completed classes
-                    </p>
+                    <p className="text-sm text-customLightGray">No completed classes</p>
                   </div>
                 ) : (
-                  compClasses.map((cls, index) => (
+                  compClasses.slice(0, 3).map((cls, index) => (
                     <TeacherCompClassesCard
                       key={index}
                       classs={cls}
@@ -207,27 +174,61 @@ export default function TeacherDashboard() {
             </div>
           </div>
         </div>
+
+        {/* Popups */}
         {popup2State.type === undefined && (
           <GiveReviewPopup
             toggleFunc={closePopup2}
             reviewModal={reviewModal}
             toggleReviewModal={toggleReviewModal}
-            classs= {popup2State.classs}
+            classs={popup2State.classs}
             setReviewCompleted={setReviewCompleted}
           />
         )}
       </div>
+
       {reviewModal && (
         <AddReview
           toggleFunc={toggleReviewModal}
           reviewSubmittedPopup={reviewSubmittedPopup}
           toggleReviewSubmittedPopup={toggleReviewSubmittedPopup}
-          classs = {selecetedClass}
+          classs={selecetedClass}
           setReviewCompleted={setReviewCompleted}
         />
       )}
+
       {reviewSubmittedPopup && (
         <ReviewSubmittedPopup toggleFunc={toggleReviewSubmittedPopup} toggleModal={toggleReviewModal} />
+      )}
+
+      {/* Modal for See All Completed Classes */}
+      {showAllCompletedModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+          <div className="bg-white rounded-lg w-11/12 md:w-2/3 lg:w-1/2 max-h-[80vh] overflow-y-auto p-6">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-lg font-semibold">All Completed Classes</h2>
+              <button
+                className="text-red-500 font-bold text-lg"
+                onClick={() => setShowAllCompletedModal(false)}
+              >
+                &times;
+              </button>
+            </div>
+
+            {compClasses.length === 0 ? (
+              <p className="text-gray-500 text-sm">No completed classes</p>
+            ) : (
+              compClasses.map((cls, index) => (
+                <TeacherCompClassesCard
+                  key={index}
+                  classs={cls}
+                  colors={giveCardColors(index)}
+                  onClick={handleCard2Click}
+                />
+              ))
+            )}
+          </div>
+        </div>
       )}
     </>
   );

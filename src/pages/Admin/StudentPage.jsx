@@ -41,6 +41,8 @@ export default function StudentPage() {
   const { students, refetch } = useGetUsers();
   const { fetchClasses, classes } = useGetClasses();
   const { user } = useUser();
+  const [selectedIds, setSelectedIds] = useState([]);
+  
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -123,8 +125,32 @@ export default function StudentPage() {
     toggleOverlay();
   };
 
+  // const toggleAllCheckboxes = () => {
+  //   setAllChecked(!allChecked);
+  // };
+  //   const toggleCheckbox = (id) => {
+  //   setParents((prevParents) =>
+  //     prevParents.map((student) =>
+  //       parent.id === id ? { ...student, checked: !student.checked } : student
+  //     )
+  //   );
+  // };
+
+   const toggleCheckbox = (id) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((pid) => pid !== id) : [...prev, id]
+    );
+  };
+
+  // ✅ Toggle all checkboxes
   const toggleAllCheckboxes = () => {
-    setAllChecked(!allChecked);
+    if (allChecked) {
+      setSelectedIds([]);
+      setAllChecked(false);
+    } else {
+      setSelectedIds(filteredStudents.map((p) => p._id));
+      setAllChecked(true);
+    }
   };
 
   return (
@@ -149,7 +175,7 @@ export default function StudentPage() {
               {/* Buttons Div  */}
               <div className="flex flex-1 flex-row flex-wrap md:flex-nowrap text-xxs md:text-xs gap-4 md:gap-0 space-x-2 items-center">
                 <button className="flex flex-row justify-center p-2 pr-3 border rounded-lg border-gray-300">
-                  <MdOutlineFilterList
+                  <MdOutlineFilterList     
                     className="text-customBlue font-bold"
                     size={16}
                   />
@@ -235,9 +261,11 @@ export default function StudentPage() {
                            key={student._id}
                            student={student}
                            assignedClasses={assignedClasses}
-                           // toggleCheckbox={toggleCheckbox}
+                          //  toggleCheckbox={toggleCheckbox(student._id)} 
                            toggleEditModal={toggleEditModal}
                            toggleDeletedPopup={toggleDeletedPopup}
+                           toggleCheckbox={toggleCheckbox}
+                           checked={selectedIds.includes(student._id)}
                          />
                        );
                      })}

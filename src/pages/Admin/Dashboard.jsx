@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
 import DetailsCard from "../../components/Dashboard/DetailsCard";
 import ScheduledClassesCard from "../../components/Dashboard/ScheduledClassesCard";
@@ -64,6 +64,7 @@ export default function Dashboard() {
               label={item.label}
               value={item.value}
               loading={loading}
+              link={item.link}
             />
           ))}
         </div>

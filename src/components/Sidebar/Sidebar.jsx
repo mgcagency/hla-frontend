@@ -1,7 +1,7 @@
 
 import React from "react";
 import mainlogo from "../../assets/new-logo.png";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { sidebar_links } from "../../constants/sidebarLinks";
 
 export default function Sidebar() {
@@ -10,7 +10,9 @@ export default function Sidebar() {
     <div className="flex flex-col h-screen mx-4">
       {/* Logo Div */}
       <div className="flex-1 flex justify-center bg-white/80 w-32 h-32 ml-4 mt-4 items-center border-b-2 border-customWhite10 ">
+        <a href="/admin/dashboard">
         <img src={mainlogo} alt="Academy Logo" className="w-[120px] h-[120px] " />
+        </a>
       </div>
 
       {/* Sidebar Links Div  */}

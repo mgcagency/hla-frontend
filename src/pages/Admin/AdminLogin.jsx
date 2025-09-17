@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { IMAGES } from "../../assets";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { login, sendCode } from "../../api/authApi";
 import { useUser } from "../../contexts/UserContext";
 import { useGetUsers } from "../../contexts/GetUsersContext";
@@ -155,11 +155,13 @@ export default function AdminLogin() {
               </div>
 
               {/* Forget Password */}
-              <div>
-                <p className="text-customYellow  font-medium text-xs hover:underline cursor-pointer">
+            <div>
+              <Link to="/forgot-password">
+                <p className="text-customYellow font-medium text-xs hover:underline cursor-pointer">
                   Forgot Password ?
                 </p>
-              </div>
+              </Link>
+            </div>
             </div>
 
             {/* Login Button  */}
