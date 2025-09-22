@@ -50,6 +50,7 @@ export default function ViewTeacherTasks() {
   const getAllTeacherTasks = async () => {
     setLoading(true);
     const data = await getTeacherTasks(location?.state?.teacher?._id);
+    const taskArray = Array.isArray(data) ? data : data?.data || [];
     setTasks(data);
     setLoading(false);
     return data;
@@ -108,7 +109,7 @@ export default function ViewTeacherTasks() {
         </div>
 
         <div className="px-10 items-stretch flex flex-col mdLg:grid mdLg:grid-cols-2 xl:grid-cols-3 gap-2 gap-y-4">
-          {tasks.map((task, index) => (
+           {Array.isArray(tasks) && tasks.map((task, index) => (
             <TeacherTaskCard
               key={index}
               title={task.title}

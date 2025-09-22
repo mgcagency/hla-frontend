@@ -187,6 +187,13 @@ export default function ScheduleClassPage() {
                     dotsMenu={true}
                     toggleEditModal= {toggleEditModal}
                     toggleDeletePopup = {toggleDeletePopup}
+                  assignedClasses={classes.filter(
+                  (cls) =>
+                    cls.student_id?._id === item.student_id?._id ||
+                    cls.teacher_id?._id === item.teacher_id?._id
+                  )}
+                  teacher={item.teacher_id}      // pass full teacher object
+                  student={item.student_id} 
                   />
                 ))
               )}

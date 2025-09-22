@@ -234,31 +234,13 @@
   display: flex;
 }
 
-.MuiTimePickerToolbar-ampmSelection button:nth-child(1) {
-  padding: 4px;
-  padding-right: 28px;
-  padding-left: 28px;
-  background-color: #5f2b38; /* Background for AM */
-  border: 2px solid #5f2b38;
-  border-right: none;
-  border-top-right-radius: 0%;
-  border-bottom-right-radius: 0%;
-}
+
 
 .MuiTimePickerToolbar-ampmSelection button:nth-child(1) .MuiTypography-root {
-  color: white; /* Text color for AM */
+  color: #49454f; /* Text color for AM */
 }
 
-.MuiTimePickerToolbar-ampmSelection button:nth-child(2) {
-  padding: 4px;
-  padding-right: 28px;
-  padding-left: 28px;
-  background-color: #f5f1f1; /* Background for PM */
-  border: 2px solid #5f2b38;
-  border-left: none;
-  border-top-left-radius: 0%;
-  border-bottom-left-radius: 0%;
-}
+
 
 .MuiTimePickerToolbar-ampmSelection button:nth-child(2) .MuiTypography-root {
   color: #49454f; /* Text color for PM */
@@ -299,6 +281,28 @@
   font-size: 1.5rem; /* Custom font size for the toolbar title */
 }
 
+.MuiTimePickerToolbar-ampmSelection button {
+  background-color: #f5f1f1; /* default background */
+  border: 1px solid #5f2b38;
+  color: #49454f; /* default text */
+}
+
+/* Selected AM/PM text */
+.MuiTimePickerToolbar-ampmSelection button .Mui-selected {
+  background-color: #5f2b38; /* selected background */
+  color: white !important;              /* selected text color */
+  border-radius: 4px;
+  padding: 4px 20px;
+  display: inline-block;
+}
+
+/* Optional: ensure unselected AM/PM has tan color */
+.MuiTimePickerToolbar-ampmSelection button:not(:has(.Mui-selected)) span {
+  background-color: #f5f1f1; /* unselected background */
+  color: #49454f;            /* unselected text */
+  border-radius: 4px;
+  padding: 4px 20px;
+}
 .css-1hbyad5-MuiTypography-root {
   color: #49454f !important;
   font-size: small !important;

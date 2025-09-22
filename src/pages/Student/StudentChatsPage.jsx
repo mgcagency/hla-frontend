@@ -1,12 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import StudentNavbar from "../../components/Navbar/StudentNavbar";
-import { IMAGES } from "../../assets";
 import ChatCard from "../../components/Student/ChatCard";
-import { chatsCardDetails } from "../../constants/chatsCardDetails";
-import { IoIosCheckmark, IoMdMore } from "react-icons/io";
-import { FiPhone } from "react-icons/fi";
+import { IoIosCheckmark } from "react-icons/io";
 import { GoDotFill } from "react-icons/go";
-import { SlOptionsVertical } from "react-icons/sl";
 import { BiSolidMessageRoundedDetail, BiSolidMicrophone } from "react-icons/bi";
 import { HiPaperClip } from "react-icons/hi";
 import { RiSendPlaneFill } from "react-icons/ri";
@@ -14,31 +10,36 @@ import { useSocket } from "../../contexts/SocketContext";
 import { useUser } from "../../contexts/UserContext";
 import { useGetUsers } from "../../contexts/GetUsersContext";
 import Loader, { Loader2 } from "../../components/Loader/Loader";
-import { ToastContainer, toast } from "react-toastify"
+import { ToastContainer, toast } from "react-toastify";
 import { editUser } from "../../api/Admin/editUser";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
 export default function StudentChatsPage() {
   const [message, setMessage] = useState({
     members: [],
-    messages: {
-      sender: "",
-      content: "",
-      mediaType: "text",
-      timestamp: new Date(),
-    },
+    messages: [
+      {
+        sender: "",
+        content: "",
+        mediaType: "text",
+        timestamp: new Date(),
+      },
+    ],
   });
   const [allMsgs, setAllMsgs] = useState([]);
   const [allChats, setAllChats] = useState([]);
-  const [sentMsg, setSentMsg] = useState("");
   const [selectedUser, setSelectedUser] = useState(null);
-  const [receiveMsg, setReceiveMsg] = useState("");
-  const { socket, initializeSocket, disconnectSocket } = useSocket();
+  const { socket, initializeSocket } = useSocket();
   const [loading, setLoading] = useState(true);
   const [imageLoading, setImageLoading] = useState(true);
   const buttonRef = useRef(null);
+  const fileInputRef = useRef(null);
+  const mediaRecorderRef = useRef(null);
+  const audioChunksRef = useRef([]);
+  const [isRecording, setIsRecording] = useState(false);
 
   const { user } = useUser();
-  const { teachers, students, refetch } = useGetUsers();
+  const { teachers, refetch } = useGetUsers();
 
   useEffect(() => {
     setLoading(true);
@@ -46,15 +47,11 @@ export default function StudentChatsPage() {
       await refetch();
       setLoading(false);
     };
-
     fetchStudents();
   }, []);
 
-  // console.log("teachers: ", teachers)
+  const handleImageLoad = () => setImageLoading(false);
 
-  const handleImageLoad = () => {
-    setImageLoading(false);
-  };
   const handleKeyPress = (event) => {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
@@ -62,11 +59,28 @@ export default function StudentChatsPage() {
     }
   };
 
+  // 🔹 Upload file to Firebase
+  const uploadFile = async (file) => {
+    try {
+      const storage = getStorage();
+      const storageRef = ref(storage, `chat_uploads/${Date.now()}_${file.name}`);
+      const response = await uploadBytes(storageRef, file);
+      const fileUrl = await getDownloadURL(response.ref);
+      return fileUrl;
+    } catch (err) {
+      console.error("Upload failed:", err);
+      toast.error("Upload failed");
+      return null;
+    }
+  };
+
+  // ---------- SEND TEXT MESSAGE ----------
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!message.messages[0].content.trim()) return;
+    if (!message.messages[0].content?.trim()) return;
+
     socket.emit("message", message);
-    setSentMsg(message.messages[0].content);
+    setAllMsgs((prevMsgs) => [...prevMsgs, message.messages[0]]);
     setMessage((prevMessage) => ({
       ...prevMessage,
       messages: [
@@ -78,31 +92,82 @@ export default function StudentChatsPage() {
         },
       ],
     }));
-    setAllMsgs((prevMsgs) => [...prevMsgs, message.messages[0]]);
-
-    setSentMsg("");
   };
 
-  useEffect(() => {
-    socket?.emit("get-all-chats", user?._id);
-    socket?.on("all-chats", (data) => {
-      setAllChats(data);
-    });
-  }, [socket]);
-
-  const handleUserSelect = (selectedUser) => {
-    setSelectedUser(selectedUser);
-    setMessage((prevMessage) => ({
-      ...prevMessage,
-      members: [user._id, selectedUser._id],
-    }));
-
-    socket.emit("get-chats", [user?._id, selectedUser?._id]);
+  // ---------- HANDLE ATTACHMENT ----------
+  const handleAttachmentClick = () => {
+    fileInputRef.current.click();
   };
 
-  socket?.on("chat-history", (data) => {
-    setAllMsgs(data.messages);
-  });
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // upload to Firebase
+    const fileUrl = await uploadFile(file);
+    if (!fileUrl) return;
+
+    // check file type
+    let mediaType = "file";
+    if (file.type.startsWith("image/")) {
+      mediaType = "image";
+    }
+
+    const newMsg = {
+      sender: user._id,
+      content: fileUrl,
+      mediaType,
+      timestamp: new Date(),
+    };
+
+    socket.emit("message", { ...message, messages: [newMsg] });
+    setAllMsgs((prev) => [...prev, newMsg]);
+  };
+
+  // ---------- HANDLE MICROPHONE ----------
+  const handleMicClick = async () => {
+    if (isRecording) {
+      mediaRecorderRef.current.stop();
+      setIsRecording(false);
+    } else {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorderRef.current = new MediaRecorder(stream);
+        audioChunksRef.current = [];
+
+        mediaRecorderRef.current.ondataavailable = (event) => {
+          if (event.data.size > 0) {
+            audioChunksRef.current.push(event.data);
+          }
+        };
+
+        mediaRecorderRef.current.onstop = async () => {
+          const audioBlob = new Blob(audioChunksRef.current, { type: "audio/webm" });
+          const audioFile = new File([audioBlob], `audio_${Date.now()}.webm`, {
+            type: "audio/webm",
+          });
+
+          const audioUrl = await uploadFile(audioFile);
+
+          const newMsg = {
+            sender: user._id,
+            content: audioUrl,
+            mediaType: "audio",
+            timestamp: new Date(),
+          };
+
+          socket.emit("message", { ...message, messages: [newMsg] });
+          setAllMsgs((prev) => [...prev, newMsg]);
+        };
+
+        mediaRecorderRef.current.start();
+        setIsRecording(true);
+      } catch (error) {
+        console.error("Microphone error:", error);
+        toast.error("Unable to access microphone.");
+      }
+    }
+  };
 
   useEffect(() => {
     initializeSocket();
@@ -110,27 +175,16 @@ export default function StudentChatsPage() {
 
   useEffect(() => {
     if (socket) {
-      console.log("Socket initialized, setting up event listeners...");
-
       socket.on("connect", async () => {
-        console.log("connected", user?.name);
-        const updateUser = {
-          isOnline: true,
-        };
         try {
-          const response = await editUser(updateUser, user?._id);
-          console.log("check the user after update:", response);
+          await editUser({ isOnline: true }, user?._id);
           refetch();
-          // toast.success("Updating Successful"); 
         } catch (error) {
-          // toast.error("Failed to update online status ");
           console.error("Error updating online status", error);
         }
       });
 
       socket.on("receive-message", (data) => {
-        console.log("Received message:", data.messages[0]);
-        // setReceiveMsg(data.messages[0].content);
         setAllMsgs((prevMsgs) => [...prevMsgs, data.messages[0]]);
       });
 
@@ -141,6 +195,20 @@ export default function StudentChatsPage() {
     }
   }, [socket]);
 
+  const handleUserSelect = (selectedUser) => {
+    setSelectedUser(selectedUser);
+    setMessage((prevMessage) => ({
+      ...prevMessage,
+      members: [user._id, selectedUser._id],
+    }));
+    socket.emit("get-chats", [user?._id, selectedUser?._id]);
+  };
+
+  socket?.on("chat-history", (data) => {
+    console.log('data',data);
+    setAllMsgs(data.messages);
+  });
+
   const formatTime = (timestamp) => {
     const date = new Date(timestamp);
     return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
@@ -148,22 +216,16 @@ export default function StudentChatsPage() {
 
   return (
     <>
-      <div
-        className={`flex flex-col pt-2 rounded-tl-3xl bg-white rounded-bl-3xl h-full w-full font-sans`}
-      >
+      <div className="flex flex-col pt-2 rounded-tl-3xl bg-white rounded-bl-3xl h-full w-full font-sans">
         <ToastContainer position="bottom-right" />
         <StudentNavbar name={user?.name} img={user?.photo} />
 
-        {/* Main Content Div  */}
         <div className="flex flex-row max-h-screen">
-          {/* Left Div  */}
+          {/* Left Section */}
           <div className="flex-1 bg-customLightGreyBg pl-2 pr-4 py-5 mb-4 rounded-tr-3xl rounded-bl-3xl">
-            {/* Heading */}
             <div className="text-customDarkBlue flex justify-center font-medium text-base mb-6">
               Conversations
             </div>
-
-            {/* Chat Card  */}
             {loading ? (
               <div className="h-[73vh] flex items-center justify-center">
                 <Loader />
@@ -194,7 +256,7 @@ export default function StudentChatsPage() {
             )}
           </div>
 
-          {/* Right Div  */}
+          {/* Right Section */}
           {!selectedUser ? (
             <div className="flex-[2] flex flex-col pr-4 py-5 items-center ">
               <p className="flex-1"> No chat selected </p>
@@ -207,7 +269,7 @@ export default function StudentChatsPage() {
             </div>
           ) : (
             <div className="flex-[2] flex flex-col pr-4 py-5 ">
-              {/* Top Div  */}
+              {/* Chat Header */}
               <div className="flex-1 flex flex-row space-x-3 items-center pl-3 pr-6 py-2 border-y border-y-gray-200">
                 <div className="flex-shrink-0">
                   {imageLoading && (
@@ -230,24 +292,26 @@ export default function StudentChatsPage() {
                       {selectedUser?.name}
                     </p>
                     <div className="flex flex-row items-center -ml-1">
-                    {selectedUser?.isOnline === true ? <GoDotFill className="text-customOnlineColor" />: null}
-                      <p className={`text-customLightGrayShade text-xxs font-normal text-start ${selectedUser?.isOnline === true ? "" : "ml-1"}`}>
-                      {selectedUser?.isOnline === true ? "Online" : "Offline"}
+                      {selectedUser?.isOnline && (
+                        <GoDotFill className="text-customOnlineColor" />
+                      )}
+                      <p
+                        className={`text-customLightGrayShade text-xxs font-normal text-start ${
+                          selectedUser?.isOnline ? "" : "ml-1"
+                        }`}
+                      >
+                        {selectedUser?.isOnline ? "Online" : "Offline"}
                       </p>
                     </div>
                   </div>
-                  {/* <div className="flex flex-row space-x-3 items-center">
-                    <FiPhone size={18} />
-                    <SlOptionsVertical size={16} />
-                  </div> */}
                 </div>
               </div>
 
-              {/* Bottom Div  */}
+              {/* Chat Body */}
               <div className="flex-[10] flex flex-col-reverse pl-4">
-                {/* Footer Div  */}
+                {/* Input Section */}
                 <div className="flex flex-row items-center mt-4">
-                  <div className="flex flex-row w-full items-center space-x-2 px-1 pr-4 border-gray-300 rounded-lg shadow-lg focus-within:outline-none focus-within:border-blue-400 focus-within:ring-1 focus-within:ring-blue-500">
+                  <div className="flex flex-row w-full items-center space-x-2 px-1 pr-4 border-gray-300 rounded-lg shadow-lg">
                     <textarea
                       rows="1"
                       placeholder="Type your message..."
@@ -272,10 +336,29 @@ export default function StudentChatsPage() {
                         e.target.style.height = e.target.scrollHeight + "px";
                       }}
                     ></textarea>
-                    <BiSolidMicrophone className="text-customMsgIconsColor w-5 h-5" />
-                    <HiPaperClip className="text-customMsgIconsColor w-5 h-5" />
+
+                    {/* Microphone */}
+                    <BiSolidMicrophone
+                      className={`${
+                        isRecording ? "text-red-500" : "text-customMsgIconsColor"
+                      } w-5 h-5 cursor-pointer`}
+                      onClick={handleMicClick}
+                    />
+
+                    {/* Paperclip */}
+                    <HiPaperClip
+                      className="text-customMsgIconsColor w-5 h-5 cursor-pointer"
+                      onClick={handleAttachmentClick}
+                    />
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      className="hidden"
+                      onChange={handleFileChange}
+                    />
                   </div>
-                  {/* send Button */}
+
+                  {/* Send Button */}
                   <div
                     ref={buttonRef}
                     onClick={handleSubmit}
@@ -284,7 +367,8 @@ export default function StudentChatsPage() {
                     <RiSendPlaneFill className="text-white" />
                   </div>
                 </div>
-                {/* Chat Area Div  */}
+
+                {/* Messages */}
                 <div className="h-[62vh] register-scrollbar2 flex flex-col-reverse gap-y-1 overflow-y-auto">
                   {allMsgs
                     .slice()
@@ -308,35 +392,52 @@ export default function StudentChatsPage() {
                         <div
                           className={` ${
                             msg.sender === user?._id
-                              ? "flex px-4 p-3 rounded-l-3xl rounded-tr-3xl md:rounded-l-full md:rounded-tr-full ml-auto max-w-[90vh]  bg-customMaroon"
-                              : "flex p-3 max-w-[90vh] rounded-r-xl rounded-bl-xl sm:rounded-r-3xl sm:rounded-bl-3xl md:rounded-r-full md:rounded-bl-full bg-customYellowShade "
+                              ? "flex px-4 p-3 rounded-l-3xl rounded-tr-3xl ml-auto max-w-[90vh] bg-customMaroon"
+                              : "flex p-3 max-w-[90vh] rounded-r-xl rounded-bl-xl bg-customYellowShade"
                           }`}
                         >
-                          <div className="flex flex-row">
-                            <p
-                              className={`${
-                                msg.sender !== user?._id
-                                  ? "text-black text-sm font-normal"
-                                  : "text-white text-sm font-normal"
-                              }`}
+                          {msg.mediaType === "audio" ? (
+                            <audio controls src={msg.content} />
+                          ) : msg.mediaType === "image" ? (
+                            <img
+                              src={msg.content}
+                              alt="attachment"
+                              className="max-w-[200px] max-h-[200px] rounded-md"
+                            />
+                          ) : msg.mediaType === "file" ? (
+                            <a
+                              href={msg.content}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="underline text-blue-500"
                             >
-                              {msg.content}
-                            </p>
-                            <div
-                              className={`flex flex-row ml-7 mt-[2px] ${
-                                msg.sender !== user?._id
-                                  ? "text-customGray"
-                                  : "text-customLightGray"
-                              } text-xxs font-medium`}
-                            >
-                              <p className="mt-[2px]">
-                                {formatTime(msg.timestamp)}
+                              File Attachment
+                            </a>
+                          ) : (
+                            <div className="flex flex-row">
+                              <p
+                                className={`${
+                                  msg.sender !== user?._id
+                                    ? "text-black text-sm"
+                                    : "text-white text-sm"
+                                }`}
+                              >
+                                {msg.content}
                               </p>
-                              <IoIosCheckmark size={18} />
-                              {/* {msg.sender === user?._id && (
-                            )} */}
+                              <div
+                                className={`flex flex-row ml-7 mt-[2px] ${
+                                  msg.sender !== user?._id
+                                    ? "text-customGray"
+                                    : "text-customLightGray"
+                                } text-xxs font-medium`}
+                              >
+                                <p className="mt-[2px]">
+                                  {formatTime(msg.timestamp)}
+                                </p>
+                                <IoIosCheckmark size={18} />
+                              </div>
                             </div>
-                          </div>
+                          )}
                         </div>
                       </div>
                     ))}
