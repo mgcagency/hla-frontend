@@ -223,7 +223,7 @@ export default function TeacherChatsPage() {
 
       <div className="flex flex-row max-h-screen">
         {/* Left Sidebar */}
-        <div className="flex-1 bg-customLightGreyBg pl-2 pr-4 py-5 mb-4 rounded-tr-3xl rounded-bl-3xl">
+        <div className="bg-customLightGreyBg pl-2 pr-4 py-5 mb-4 rounded-tr-3xl rounded-bl-3xl">
           <div className="text-customDarkBlue flex justify-center font-medium text-base mb-6">
             Conversations
           </div>

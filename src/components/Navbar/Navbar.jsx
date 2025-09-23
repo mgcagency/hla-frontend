@@ -159,7 +159,7 @@ export default function Navbar({ heading, img, name, role }) {
 
       {/* Notification + Profile */}
       <div className="flex-1 md:flex-1 lg:flex-[2] flex items-center ">
-        <div
+        {/* <div
           className="flex-1 ml-5 cursor-pointer pr-3"
           onClick={togglePopup}
         >
@@ -169,7 +169,7 @@ export default function Navbar({ heading, img, name, role }) {
             className="text-customLightRed absolute top-7 ml-[10px]"
             size={13}
           />
-        </div>
+        </div> */}
 
         {/* Profile */}
         <div className="flex-[6] flex justify-start items-center border-l border-l-gray-200">
