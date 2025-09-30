@@ -19,24 +19,24 @@ export const teacher_sidebar_links = [
     icon: <img src={IMAGES.chats_icon} alt="settings_icon" className="" />,
     path: "/teacher/chats",
   },
-  {
-    key: "monthly-plan",
-    label: "Monthly Plan",
-    icon: <img src={IMAGES.plan} alt="settings_icon" className="" />,
-    path: "/teacher/monthly-plan",
-  },
+  // {
+  //   key: "monthly-plan",
+  //   label: "Monthly Plan",
+  //   icon: <img src={IMAGES.plan} alt="settings_icon" className="" />,
+  //   path: "/teacher/monthly-plan",
+  // },
   {
     key: "wellbeing",
     label: "Wellbeing",
     icon: <img src={IMAGES.wellbeing_icon} alt="wellbeing_icon" className="" />,
     path: "/teacher/wellbeings",
   },
-  {
-    key: "wellness",
-    label: "Wellness",
-    icon: <img src={IMAGES.wellness} alt="wellbeing_icon" className="" />,
-    path: "/teacher/wellness",
-  },
+  // {
+  //   key: "wellness",
+  //   label: "Wellness",
+  //   icon: <img src={IMAGES.wellness} alt="wellbeing_icon" className="" />,
+  //   path: "/teacher/wellness",
+  // },
   {
     key: "profile",
     label: "Profile",
