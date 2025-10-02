@@ -1,0 +1,40 @@
+import React from "react";
+import { FaCheck } from "react-icons/fa6";
+
+import { GoCheck } from "react-icons/go";
+
+export default function ReviewSubmittedPopup({ toggleFunc, toggleModal }) {
+  const handleOkClick = () => {
+    toggleFunc();
+    toggleModal();
+  };
+
+  return (
+    <>
+      <div className="fixed inset-0 flex items-center justify-center h-screen w-auto z-10">
+        <div className="w-[340px] bg-customPopupBgColor p-4 rounded-3xl font-sans space-y-3 border border-gray-300">
+          <div className="flex-1 flex flex-row items-center ">
+            <FaCheck className="text-customGreen" size={20} />
+
+            <p className="text-customGray font-bold text-lg ml-2">
+              Review Sumbitted
+            </p>
+          </div>
+
+          <div className="flex-[2] font-normal text-sm text-customPopupTextColor mb-2">
+            Your lesson review has been successfully submitted.
+          </div>
+
+          <div className=" flex justify-end">
+            <button
+              className="p-2 px-9 bg-customGreen text-customPopupBgColor text-sm font-normal rounded-3xl"
+              onClick={handleOkClick}
+            >
+              Ok
+            </button>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}

@@ -1,0 +1,37 @@
+import { IMAGES } from "../assets";
+
+export const scheduleClassesData = [
+  {
+    title: "App Development",
+    location: "Online",
+    teacherName: "Ava Calvar",
+    teacherImg: IMAGES.teacher_avatar,
+    studentName: "Alex Jhons",
+    studentImg: IMAGES.student_avatar,
+    time: "10:00am - 11:00am",
+    days: "Mon - Thu",
+    bgColor: "bg-customCard1Color",
+  },
+  {
+    title: "App Development",
+    location: "Online",
+    teacherName: "Ava Calvar",
+    teacherImg: IMAGES.teacher_avatar,
+    studentName: "Alex Jhons",
+    studentImg: IMAGES.student_avatar,
+    time: "10:00am - 11:00am",
+    days: "Mon - Thu",
+    bgColor: "bg-customCard2Color",
+  },
+  {
+    title: "App Development",
+    location: "Online",
+    teacherName: "Ava Calvar",
+    teacherImg: IMAGES.teacher_avatar,
+    studentName: "Alex Jhons",
+    studentImg: IMAGES.student_avatar,
+    time: "10:00am - 11:00am",
+    days: "Mon - Thu",
+    bgColor: "bg-customCard3Color",
+  },
+];

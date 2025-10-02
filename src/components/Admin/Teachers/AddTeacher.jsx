@@ -1,0 +1,245 @@
+import React, { useState } from "react";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import { RiCloseLine } from "react-icons/ri";
+import { IMAGES } from "../../../assets";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
+import { useGetUsers } from "../../../contexts/GetUsersContext";
+import { addUser } from "../../../api/Admin/addUser";
+import Loader from "../../Loader/Loader";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { uploadFile } from "../../../utils/FileUpload";
+
+export default function AddTeacher({
+  toggleFunc,
+  toggleAddedPopup,
+  addedPopup,
+}) {
+  const [showConfrimPassword, setShowConfrimPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const [photo, setPhoto] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNo, setPhoneNo] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const [loader, setLoader] = useState(false);
+
+  const { refetch } = useGetUsers();
+
+
+  const handleAddClick = async () => {
+    setLoader(true);
+    const fileUrl = await uploadFile(photo);
+    if (
+      name !== "" &&
+      email !== "" &&
+      password !== "" &&
+      confirmPassword !== ""
+    ) {
+      const newTeacher = {
+        name,
+        email,
+        phoneNo,
+        photo: fileUrl,
+        role: "teacher",
+        password,
+        confirmPassword,
+      };
+      try {
+        const response = await addUser(newTeacher);
+        refetch();
+        toast.success("New Teacher Added Successfully");
+        toggleAddedPopup();
+      } catch (error) {
+        toast.error("Failed to add new teacher");
+        console.error("Error adding new teacher:", error);
+      }
+    } else {
+      toast.error("Please fill all the fields");
+    }
+    setLoader(false);
+  };
+
+  const handlePassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleConfirmPassword = () => {
+    setShowConfrimPassword(!showConfrimPassword);
+  };
+  return (
+    <div className="h-screen overflow-y-auto register-scrollbar3 rounded-l-3xl bg-customNewStudentCardColor absolute flex justify-end right-0 font-sans ">
+      {addedPopup && <div className="bg-black fixed inset-0 opacity-50"></div>}
+      <ToastContainer position="bottom-right" />
+      <div className=" w-[400px]  items-center">
+        {/* close button  */}
+        <div className="flex justify-start flex-1">
+          <div
+            onClick={toggleFunc}
+            className="bg-white mt-3 ml-4 border border-gray-200 rounded-full w-[35px] h-[35px] shadow-xl flex justify-center items-center cursor-pointer"
+          >
+            <RiCloseLine className="text-customGrayText" />
+          </div>
+        </div>
+        {/* Heading  */}
+        <div className="flex flex-1 justify-center mb-6">
+          <p className=" mt-6 font-medium text-2xl">New Teacher</p>
+        </div>
+
+        {/* Teacher Pic  */}
+        <div className="flex-1 flex justify-center">
+          <img
+            src={IMAGES.teacher_avatar}
+            alt="New Teacher Pic"
+            className="w-24 h-24 rounded-full"
+          ></img>
+          <input
+            type="file"
+            id="file"
+            onChange={(e) => {
+              setPhoto(e.target.files[0]);
+            }}
+            className="hidden"
+          />
+          <label htmlFor="file" className="absolute mt-20 ml-14">
+            <img
+              src={IMAGES.edit_icon}
+              alt="Edit Icon"
+              className="w-[23px] h-[23px] cursor-pointer "
+            ></img>
+          </label>
+        </div>
+
+        {/* Form  */}
+        <div className="flex-[5] p-8 text-xs ">
+          {/* <form action=""> */}
+          {/* Name Field  */}
+          <div className="mb-4">
+            <p className="text-customLightGray mb-1 ">Teacher Name</p>
+            <input
+              type="text"
+              required
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Enter Teacher Name"
+              maxLength={35}
+              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-md focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-500"
+            />
+          </div>
+
+          {/* Email Field  */}
+          <div className="mb-4">
+            <p className="text-customLightGray mb-1 ">Email</p>
+            <input
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter Teacher's Email"
+              maxLength={35}
+              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-md focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-500"
+            />
+          </div>
+
+          {/* Phone number Field  */}
+          {/* <div className="mb-4 ">
+            <p className="text-customLightGray mb-1 ">PhoneNo</p>
+            <div className="flex flex-row border border-gray-300 rounded-md shadow-md focus-within:outline-none focus-within:border-blue-400 focus-within:ring-1 focus-within:ring-blue-500">
+              <PhoneInput
+                country={"eg"}
+                enableSearch={true}
+                value={phoneNo}
+                onChange={(phone, country, e, formattedValue) =>
+                  setPhoneNo(formattedValue)
+                }
+                placeholder="Enter Phone No"
+                maxLength={11}
+                containerClass="phone-input-container"
+                inputClass="phone-input"
+                buttonClass="phone-input-button"
+                className={`w-full pl-1 text-sm outline-none bg-white rounded-l-lg rounded-r-md ${
+                  addedPopup ? "opacity-15 " : "opacity-100"
+                }`}
+              />
+            </div>
+          </div> */}
+
+          {/* Password Field  */}
+          <div className="mb-4">
+            <p className="text-customLightGray mb-1">Password</p>
+            <div className="flex flex-row items-center bg-white border border-gray-300 rounded-md shadow-md focus-within:outline-none focus-within:border-blue-400 focus-within:ring-1 focus-within:ring-blue-500">
+              <input
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                type={`${showPassword ? "text" : "password"}`}
+                placeholder="Enter Password"
+                maxLength={25}
+                className="w-full px-3 py-2 text-sm outline-none rounded-md"
+              />
+              <button onClick={handlePassword}>
+                {showPassword ? (
+                  <AiOutlineEye size={20} color="Gray" className="ml-3 mr-2" />
+                ) : (
+                  <AiOutlineEyeInvisible
+                    size={20}
+                    color="Gray"
+                    className="ml-3 mr-2"
+                  />
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/*Confirm Password Field  */}
+          <div className="mb-4">
+            <p className="text-customLightGray  mb-1">Confirm Password</p>
+            <div className="flex flex-row items-center bg-white border border-gray-300 rounded-md shadow-md focus-within:outline-none focus-within:border-blue-400 focus-within:ring-1 focus-within:ring-blue-500">
+              <input
+                required
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                type={`${showConfrimPassword ? "text" : "password"}`}
+                placeholder="Enter Confirm Password"
+                maxLength={25}
+                className="w-full px-3 py-2 text-sm outline-none rounded-md"
+              />
+              <button onClick={handleConfirmPassword}>
+                {showConfrimPassword ? (
+                  <AiOutlineEye size={20} color="Gray" className="ml-3 mr-2" />
+                ) : (
+                  <AiOutlineEyeInvisible
+                    size={20}
+                    color="Gray"
+                    className="ml-3 mr-2"
+                  />
+                )}
+              </button>
+            </div>
+          </div>
+          {/* </form> */}
+          {/* Register Button  */}
+          <div className="w-full flex items-center justify-center mt-10 mb-8">
+            {loader ? (
+              <Loader />
+            ) : (
+              <button
+                type="submit"
+                onClick={handleAddClick}
+                className="bg-customMaroon w-7/10 rounded-3xl py-3"
+              >
+                <p className=" text-white font-medium text-base">
+                  Register Account
+                </p>
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
