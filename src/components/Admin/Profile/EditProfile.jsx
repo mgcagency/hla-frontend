@@ -23,6 +23,7 @@ prevuser,
   const [photo, setPhoto] = useState(prevuser.photo);
 
   const [loader, setLoader] = useState(false);
+  const [previewPhoto, setPreviewPhoto] = useState(prevuser.photo);
   const navigate = useNavigate();
 
   const { user,setUser } = useUser();
@@ -91,18 +92,28 @@ prevuser,
 
         {/* Student Pic  */}
         <div className="flex-1 flex justify-center">
-          <img
+          {/* <img
             src={prevuser?.photo || IMAGES.student_avatar}
             alt="New Student Pic"
             className="w-[100px] h-[100px] rounded-full"
-          ></img>
-          <input
-            type="file"
-            id="file"
-            onChange={(e) => {
-              setPhoto(e.target.files[0]);
-            }}
-            className="hidden"
+          ></img> */}
+        <input
+          type="file"
+          id="file"
+          onChange={(e) => {
+          const file = e.target.files[0];
+          if (file) {
+            setPhoto(file); // keep file for upload
+            setPreviewPhoto(URL.createObjectURL(file)); // temporary preview
+          }
+        }}
+        className="hidden"
+      />
+
+          <img
+            src={previewPhoto || IMAGES.student_avatar} // show preview
+            alt="User Pic"
+            className="w-[100px] h-[100px] rounded-full"
           />
           <label htmlFor="file" className="absolute mt-20 ml-14">
             <img

@@ -43,22 +43,22 @@ export const sidebar_links = [
     icon: <img src={IMAGES.wellbeing_icon} alt="wellbeing_icon" className="" />,
     path: "/admin/wellbeing",
   },
-  {
-    key: "monthly_plan",
-    label: "Planning",
-    icon: <img
-    src={IMAGES.plan}
-    alt="schedule classesicon"
-    className=""
-  />,
-    path: "/admin/monthly-plan",
-  },
-  {
-    key: "wellness",
-    label: "Wellness",
-    icon: <img src={IMAGES.wellness} alt="wellness_icon" className="" />,
-    path: "/admin/wellness",
-  },
+  // {
+  //   key: "monthly_plan",
+  //   label: "Planning",
+  //   icon: <img
+  //   src={IMAGES.plan}
+  //   alt="schedule classesicon"
+  //   className=""
+  // />,
+  //   path: "/admin/monthly-plan",
+  // },
+  // {
+  //   key: "wellness",
+  //   label: "Wellness",
+  //   icon: <img src={IMAGES.wellness} alt="wellness_icon" className="" />,
+  //   path: "/admin/wellness",
+  // },
   {
     key: "settings",
     label: "Settings",

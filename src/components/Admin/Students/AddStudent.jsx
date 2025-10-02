@@ -61,6 +61,7 @@ export default function AddStudent({
         phoneNo,
         photo: fileUrl,
         password,
+        role: "student",
         confirmPassword,
       };
       try {

@@ -10,12 +10,18 @@ import { useUser } from "../../contexts/UserContext";
 import Loader from "../../components/Loader/Loader";
 import { useGetClasses } from "../../contexts/GetClassesContext";
 import { giveBgColor } from "../../utils/BgColor";
+import ParentProfile from "../../components/Admin/Parents/ParentProfile";
+import StudentProfile from "../../components/Admin/Students/StudentProfile";
+import TeacherProfile from "../../components/Admin/Teachers/TeacherProfile";
 
 export default function Dashboard() {
   const { teachers, students, parents, users, refetch, isLoggedIn } =
     useGetUsers();
   const { user } = useUser();
   const [loading, setLoading] = useState(true);
+  const [selectedParent, setSelectedParent] = useState(null);
+  const [selectedStudent, setSelectedStudent] = useState(null);
+  const [selectedTeacher, setSelectedTeacher] = useState(null);
   const navigate = useNavigate();
 
   const { classes, fetchClasses } = useGetClasses();
@@ -38,6 +44,25 @@ export default function Dashboard() {
     }
   }, [teachers, students, parents, users, isLoggedIn, loading]);
 
+ const handleUserClick = (user) => {
+  if (user.role === "parent") {
+    setSelectedParent(user);
+    setSelectedStudent(null);
+    setSelectedTeacher(null);
+  } else if (user.role === "student") {
+    setSelectedStudent(user);
+    setSelectedParent(null);
+    setSelectedTeacher(null);
+  } else if (user.role === "teacher") {
+    setSelectedTeacher(user);
+    setSelectedParent(null);
+    setSelectedStudent(null);
+  } else {
+    setSelectedParent(null);
+    setSelectedStudent(null);
+    setSelectedTeacher(null);
+  }
+};
   return (
     // Full Screen
     <div className="flex flex-row h-full">
@@ -111,6 +136,13 @@ export default function Dashboard() {
                     days={item.weekDays}
                     dotsMenu={false}
                     bgColor={giveBgColor(index)}
+                     assignedClasses={classes.filter(
+                      (cls) =>
+                        cls.student_id?._id === item.student_id?._id ||
+                        cls.teacher_id?._id === item.teacher_id?._id
+                    )}
+                       teacher={item.teacher_id}      // pass full teacher object
+                      student={item.student_id} 
                   />
                 ))}
             </div>
@@ -143,10 +175,11 @@ export default function Dashboard() {
                 .reverse()
                 .slice(0, 6)
                 .map((item, index) => (
-                  <div
-                    key={index}
-                    className="w-full flex flex-row items-center space-x-5 p-2 shadow-md text-xs text-customLightGray rounded-lg cursor-pointer "
-                  >
+                     <div
+                key={index}
+                className="w-full flex flex-row items-center space-x-5 p-2 shadow-md text-xs text-customLightGray rounded-lg cursor-pointer"
+                onClick={() => handleUserClick(item)}
+              >
                     <img
                       src={item.photo || IMAGES.user}
                       alt="User Pic"
@@ -161,6 +194,25 @@ export default function Dashboard() {
           )}
         </div>
       </div>
-    </div>
+
+     {selectedParent && (
+        <ParentProfile
+          parent={selectedParent}
+          toggleFunc={() => setSelectedParent(null)}
+        />
+      )}
+      {selectedStudent && (
+        <StudentProfile
+          student={selectedStudent}
+          toggleFunc={() => setSelectedStudent(null)}
+        />
+      )} 
+      {selectedTeacher && (
+        <TeacherProfile
+          teacher={selectedTeacher}
+          toggleFunc={() => setSelectedTeacher(null)}
+        />
+      )}
+   </div>
   );
 }

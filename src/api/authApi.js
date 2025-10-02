@@ -58,14 +58,11 @@ export const forgotPassword = async (data) => {
       `${BACKEND_URL}user/send/new-password`, 
       data
     );
-    console.log("response",response)
 
-    const result = response;
-    console.log(result);
-    return result;
+    // ✅ Return only response.data (not whole response object)
+    return response.data;  
   } catch (err) {
-    console.log(err.response?.data?.message || "Something went wrong");
-    const msg =err.response?.data?.message || "Something went wrong";
-    return msg;
+    const msg = err.response?.data?.message || "Something went wrong";
+    return { success: false, message: msg }; // keep consistent shape
   }
 };

@@ -136,13 +136,13 @@ console.log("filteredStudents", filteredStudents);
               <div className="flex flex-1 flex-row w-auto items-center gap-10 mb-2 font-sans">
                 {/* Buttons Div  */}
                 <div className="flex flex-row flex-wrap md:flex-nowrap text-xxs md:text-xs gap-4 md:gap-0 space-x-2 items-center">
-                  <button className="flex flex-row justify-center p-2 pr-3 border rounded-lg border-gray-300">
+                  {/* <button className="flex flex-row justify-center p-2 pr-3 border rounded-lg border-gray-300">
                     <MdOutlineFilterList
                       className="text-customBlue font-bold"
                       size={16}
                     />
                     <p className=" text-customBlue font-medium ml-2">Filters</p>
-                  </button>
+                  </button> */}
                 </div>
 
                 {/* SearchBar Div  */}

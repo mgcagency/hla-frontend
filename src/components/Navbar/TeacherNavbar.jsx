@@ -3,10 +3,15 @@ import { GoDotFill } from "react-icons/go";
 import { TbBell } from "react-icons/tb";
 import NotificationPopup from "../global/NotificationPopup";
 import { Loader2 } from "../Loader/Loader";
+import { useSocket } from "../../contexts/SocketContext";
+import { useUser } from "../../contexts/UserContext";
 
 export default function StudentNavbar({ name, img }) {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [imageLoading, setImageLoading] = useState(true);
+  const { socket,initializeSocket } = useSocket();
+  const { user } = useUser();
+  const [notifications, setNotifications] = useState([]);
   const handleImageLoad = () => {
     setImageLoading(false);
   };
@@ -14,6 +19,30 @@ export default function StudentNavbar({ name, img }) {
   const togglePopup = () => {
     setIsPopupVisible(!isPopupVisible);
   };
+
+   useEffect(() => {
+    if (!socket) {
+      initializeSocket();
+    }
+  }, [socket, initializeSocket]);
+    // Listen for notifications
+  useEffect(() => {
+  if (!socket || !user?._id) return;
+
+  // Handler for receiving notifications
+  const handleNotification = (data) => {
+    setNotifications(prev => [data, ...prev]);
+  };
+
+  // Listen on a user-specific event (you can also use a generic event if you prefer)
+  socket.on(`receive-notification-${user._id}`, handleNotification);
+
+  return () => {
+    socket.off(`receive-notification-${user._id}`, handleNotification);
+  };
+}, [socket, user]);
+console.log('notification', notifications);
+
 
   return (
     <div className="flex flex-row w-full h-[80px] rounded-tl-3xl md:pl-10 items-center font-sans font-medium text-base">
@@ -39,13 +68,16 @@ export default function StudentNavbar({ name, img }) {
 
       {/* Notification Icon  */}
       <div className="flex-1 ml-5 relative border-l border-l-gray-200 pl-4 pr-3 md:pr-2 lg:pr-1 xl:pr-0">
-        {isPopupVisible && <NotificationPopup toggleFunc={togglePopup} />}
+        {isPopupVisible && <NotificationPopup toggleFunc={togglePopup} notifications={notifications}/>}
         <TbBell size={22} />
-        <GoDotFill
-          className="text-customLightRed cursor-pointer absolute top-0 ml-[10px] "
-          size={13}
-          onClick={togglePopup}
-        />
+           {notifications.length > 0 && (
+         <GoDotFill
+           className="text-customLightRed absolute top-0 ml-[10px]"
+           size={13}
+           onClick={togglePopup}
+         />
+       )}
+       
       </div>
     </div>
   );
