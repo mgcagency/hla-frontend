@@ -18,6 +18,7 @@ export default function TeacherDetailsCard({
   toggleEditModal,
   toggleDeletedPopup,
   assignedClasses,
+  toggleCheckbox
 }) {
   const navigate = useNavigate();
   const [deletedPopup, setDeletedPopup] = useState(false);
@@ -62,7 +63,8 @@ export default function TeacherDetailsCard({
         className={`flex-1 cursor-pointer ${
           checked ? "text-customMaroon" : "text-customLightGray"
         }`}
-        onClick={() => toggleCheckbox(id)}
+        // onClick={() => toggleCheckbox(id)}
+        onClick={() => toggleCheckbox(teacher?._id)}
       >
         {checked ? (
           <MdOutlineCheckBox size={20} />

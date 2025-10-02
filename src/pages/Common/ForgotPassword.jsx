@@ -3,27 +3,30 @@ import { IMAGES } from "../../assets";
 import { Link } from "react-router-dom";
 import { forgotPassword } from "../../api/authApi";
 
-
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState(""); 
+  const [success, setSuccess] = useState(false); // track success
   const [loading, setLoading] = useState(false);
 
+  const handleResetPassword = async () => {
+    if (!email) {
+      setMessage("Please enter your email");
+      setSuccess(false);
+      return;
+    }
 
-   const handleResetPassword = async () => {
-  if (!email) {
-    setMessage("Please enter your email");
-    return;
-  }
+    setLoading(true);
+    setMessage(""); 
 
-  setLoading(true);
-  setMessage(""); // clear previous
+    const msg = await forgotPassword({ email });
+    console.log("msg", msg);
 
-  const msg = await forgotPassword({ email });
-  setMessage(msg); // always a string now
+    setMessage(msg.message || "Something went wrong");
+    setSuccess(msg.success === true); // update based on API response
 
-  setLoading(false);
-};
+    setLoading(false);
+  };
 
   return (
     <div className="bg-custom-gradient w-auto h-auto">
@@ -49,12 +52,19 @@ export default function ForgotPassword() {
                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-md focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-500"
               />
             </div>
+
             {message && (
-              <p className="text-center text-sm mb-3 text-red-500">{message}</p>
+              <p
+                className={`text-center text-sm mb-3 ${
+                  success ? "text-green-500" : "text-red-500"
+                }`}
+              >
+                {message}
+              </p>
             )}
 
             {/* Reset Button */}
-          <div className="w-full flex items-center justify-center mt-6">
+            <div className="w-full flex items-center justify-center mt-6">
               <button
                 type="button"
                 onClick={handleResetPassword}
@@ -68,15 +78,6 @@ export default function ForgotPassword() {
                 </p>
               </button>
             </div>
-
-            {/* Back to Login */}
-            {/* <div className="flex justify-center mt-4">
-              <Link to="/admin/login">
-                <p className="text-customYellow font-medium text-xs hover:underline cursor-pointer">
-                  Back to Login
-                </p>
-              </Link>
-            </div> */}
           </div>
         </div>
 
