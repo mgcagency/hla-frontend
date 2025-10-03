@@ -13,6 +13,7 @@ import Loader, { Loader2 } from "../../components/Loader/Loader";
 import { ToastContainer, toast } from "react-toastify";
 import { editUser } from "../../api/Admin/editUser";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import { useLocation } from "react-router-dom";
 
 export default function StudentChatsPage() {
   const [message, setMessage] = useState({
@@ -40,6 +41,7 @@ export default function StudentChatsPage() {
 
   const { user } = useUser();
   const { teachers, refetch } = useGetUsers();
+  const location = useLocation();
 
   useEffect(() => {
     setLoading(true);
@@ -195,20 +197,45 @@ export default function StudentChatsPage() {
     }
   }, [socket]);
 
-  const handleUserSelect = (selectedUser) => {
-    setSelectedUser(selectedUser);
-    setMessage((prevMessage) => ({
-      ...prevMessage,
-      members: [user._id, selectedUser._id],
-    }));
-    socket.emit("get-chats", [user?._id, selectedUser?._id]);
-  };
+const handleUserSelect = (selectedUser) => {
+  setSelectedUser(selectedUser);
+  setMessage((prevMessage) => ({
+    ...prevMessage,
+    members: [user._id, selectedUser._id],
+  }));
+  socket.emit("get-chats", [user?._id, selectedUser?._id]);
+};
 
-  socket?.on("chat-history", (data) => {
-    console.log('data',data);
-    setAllMsgs(data.messages);
-  });
+  // socket?.on("chat-history", (data) => {
+  //   console.log('data',data);
+  //   setAllMsgs(data.messages);
+  // });
+  useEffect(() => {
+  if (socket) {
+    socket.on("chat-history", (data) => {
+      if (data && data.messages) {
+        setAllMsgs(data.messages);
+      }
+    });
 
+    socket.on("receive-message", (data) => {
+      if (data && data.messages) {
+        setAllMsgs((prevMsgs) => [...prevMsgs, data.messages[0]]);
+      }
+    });
+
+    return () => {
+      socket.off("chat-history");
+      socket.off("receive-message");
+    };
+  }
+}, [socket]);
+
+useEffect(() => {
+  if (socket && location.state?.selectedUser) {
+    handleUserSelect(location.state.selectedUser);
+  }
+}, [socket, location.state]);
   const formatTime = (timestamp) => {
     const date = new Date(timestamp);
     return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
