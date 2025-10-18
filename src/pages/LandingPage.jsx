@@ -65,11 +65,11 @@ export default function LandingPage() {
         </div>
 
         {/* Right Div */}
-        <div className="flex-1 flex justify-center items-center bg-customWhite30 w-[auto] lg:w-[580px] h-[300px] lg:h-auto border-2 border-customWhite30 opacity-100 m-6 rounded-2xl">
+        <div className="flex-1 flex justify-center items-center w-[auto] lg:w-[580px] h-[300px] lg:h-auto opacity-100 m-6 rounded-2xl">
           <img
             src={IMAGES.main_logo}
             alt="Afcademy Logo"
-            className="h-[150px] w-[150px] lg:h-[230px] lg:w-[230px]"
+            className="h-[380px] w-[380px] lg:h-[390px] lg:w-[390px]"
           />
         </div>
       </div>

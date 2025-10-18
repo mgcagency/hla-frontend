@@ -119,7 +119,7 @@ export default function ParentsProfilePage() {
                 </button>
                 <button
                   onClick={handleLogout}
-                  className="px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white text-sm"
+                  className="text-white text-sm font-normal bg-customMaroon p-2 px-4 border rounded-md flex flex-row items-center"
                 >
                   Log Out
                 </button>

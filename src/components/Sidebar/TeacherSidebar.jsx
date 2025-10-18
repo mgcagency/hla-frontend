@@ -7,13 +7,15 @@ export default function TeacherSidebar() {
   return (
     <div className="flex flex-col h-screen mx-4">
       {/* Logo Div */}
-      <div className="flex-1 flex justify-center bg-white/80 w-32 h-32 ml-4 mt-4 items-center border-b-2 border-customWhite10 ">
-             <a href="/teacher/dashboard">
+      {/* <div className="flex-1 flex justify-center bg-white/80 w-32 h-32 ml-4 mt-4 items-center border-b-2 border-customWhite10 "> */}
+      <div className="flex-1 w-full flex justify-center items-center border-customWhite10 mt-4 mb-4 ">
+
+        <a href="/teacher/dashboard">
         
         <img
           src={IMAGES.main_logo}
           alt="Academy Logo"
-          className="w-[100px] h-[100px]"
+          className="w-[120px] h-[120px]"
         />
         </a>
 
@@ -44,7 +46,7 @@ function SidebarLink({ item }) {
       onClick={handleClick}
       className={`flex justify-normal items-center text-sm py-2 pl-3 pr-3 rounded mb-2 cursor-pointer font-inter ${
         isActive
-          ? "bg-customYellow/50 text-white"
+          ? "bg-customYellow text-white"
           : "hover:bg-customYellowLight/50 hover:text-white"
       }`}
     >
