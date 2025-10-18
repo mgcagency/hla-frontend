@@ -13,6 +13,7 @@ import { useGetUsers } from "../../contexts/GetUsersContext";
 import Loader, { Loader2 } from "../../components/Loader/Loader";
 import { editUser } from "../../api/Admin/editUser";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import { useLocation } from "react-router-dom";
 
 export default function TeacherChatsPage() {
   const [message, setMessage] = useState({
@@ -41,6 +42,7 @@ export default function TeacherChatsPage() {
   const { socket, initializeSocket } = useSocket();
   const { user } = useUser();
   const { students, refetch } = useGetUsers();
+  const location = useLocation();
 
   // Fetch students
   useEffect(() => {
@@ -197,18 +199,46 @@ export default function TeacherChatsPage() {
     }
   }, [socket]);
 
-  const handleUserSelect = (selectedUser) => {
-    setSelectedUser(selectedUser);
-    setMessage((prevMessage) => ({
-      ...prevMessage,
-      members: [user._id, selectedUser._id],
-    }));
-    socket.emit("get-chats", [user?._id, selectedUser?._id]);
-  };
+const handleUserSelect = (selectedUser) => {
+  setSelectedUser(selectedUser);
+  setMessage((prevMessage) => ({
+    ...prevMessage,
+    members: [user._id, selectedUser._id],
+  }));
+  socket.emit("get-chats", [user?._id, selectedUser?._id]);
+};
 
-  socket?.on("chat-history", (data) => {
-    setAllMsgs(data.messages);
-  });
+  // socket?.on("chat-history", (data) => {
+  //   setAllMsgs(data.messages);
+  // });
+  useEffect(() => {
+  if (socket) {
+    socket.on("chat-history", (data) => {
+      if (data && data.messages) {
+        setAllMsgs(data.messages);
+      }
+    });
+
+    socket.on("receive-message", (data) => {
+      if (data && data.messages) {
+        setAllMsgs((prevMsgs) => [...prevMsgs, data.messages[0]]);
+      }
+    });
+
+    return () => {
+      socket.off("chat-history");
+      socket.off("receive-message");
+    };
+  }
+}, [socket]);
+
+
+
+ useEffect(() => {
+  if (socket && location.state?.selectedUser) {
+    handleUserSelect(location.state.selectedUser);
+  }
+}, [socket, location.state]);
 
   const formatTime = (timestamp) => {
     const date = new Date(timestamp);
@@ -223,7 +253,7 @@ export default function TeacherChatsPage() {
 
       <div className="flex flex-row max-h-screen">
         {/* Left Sidebar */}
-        <div className="bg-customLightGreyBg pl-2 pr-4 py-5 mb-4 rounded-tr-3xl rounded-bl-3xl">
+        <div className="flex-1 bg-customLightGreyBg pl-2 pr-4 py-5 mb-4 rounded-tr-3xl rounded-bl-3xl">
           <div className="text-customDarkBlue flex justify-center font-medium text-base mb-6">
             Conversations
           </div>
