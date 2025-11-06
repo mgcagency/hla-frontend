@@ -47,13 +47,24 @@ export default function EditSchedule({
 
 const handleUpdateClick = async () => {
   setLoading(true);
+      let offsiteAddressData = selectedLocation.offsiteAddress;
+ if (
+    selectedLocation.name === "Student's Home" ||
+    selectedLocation.name === "Face to Face" ||
+    selectedLocation.name === "Online Course"  ||
+    selectedLocation.name === "Virtual" || 
+    selectedLocation.name === "Learning Pack"
+
+  ) {
+    offsiteAddressData = selectedLocation.inputArea; // or whatever field you're using
+  }
   const updatedClass = {
     title,
     student_id: selectedStudents._id,
     teacher_id: selectedTeacher._id,
     location: {
       name: selectedLocation.name,
-      offsiteAddress: selectedLocation.offsiteAddress,
+      offsiteAddress: offsiteAddressData,
       url: selectedLocation.url,
     },
     startTime: startTime,

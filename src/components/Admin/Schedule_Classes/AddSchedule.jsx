@@ -60,14 +60,27 @@ export default function AddSchedule({
 
     console.log("at the start of add function");
 
+    console.log('selectedLocation')
+
     setLoading(true);
+    let offsiteAddressData = selectedLocation.offsiteAddress;
+ if (
+    selectedLocation.name === "Student's Home" ||
+    selectedLocation.name === "Face to Face" ||
+    selectedLocation.name === "Online Course"  ||
+    selectedLocation.name === "Virtual" || 
+    selectedLocation.name === "Learning Pack"
+
+  ) {
+    offsiteAddressData = selectedLocation.inputArea; // or whatever field you're using
+  }
     const newClass = {
       title,
       student_id: selectedStudents._id,
       teacher_id: selectedTeacher._id,
       location: {
         name: selectedLocation.name,
-        offsiteAddress: selectedLocation.offsiteAddress,
+        offsiteAddress: offsiteAddressData,
         url: selectedLocation.url,
       },
       startTime: startTime,
@@ -115,10 +128,13 @@ export default function AddSchedule({
   };
 
   const locationType = (location) => {
+
     if (
       location.name === "Student's Home" ||
       location.name === "Face to Face"
     ) {
+    
+
       return location.inputArea;
     } else if (location.name === "Off-site") {
       return `Address : ${location?.offsiteAddress}`;

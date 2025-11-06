@@ -76,7 +76,7 @@ export default function WellbeingPage() {
             </div>
           ) : wellbeings?.length === 0 ? (
             <div className="flex w-full h-40 justify-center font-normal items-center">
-              <p>No wellbeings created</p>
+              <p>No Wellbeing signposting created</p>
             </div>
           ) : (
             <div className="px-10 items-stretch flex flex-col mdLg:grid mdLg:grid-cols-2 xl:grid-cols-3 gap-2 gap-y-4">
