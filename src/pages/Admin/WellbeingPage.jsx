@@ -58,7 +58,7 @@ export default function WellbeingPage() {
           {/* Heading and Buttons Div  */}
           <div className="flex flex-row justify-between px-10 pt-10 pb-4">
             {/* Name and Image div  */}
-            <p className="text-lg font-medium">All wellbeing signposts</p>
+            <p className="text-lg font-medium">Wellbeing Signposts</p>
 
             <div className="text-white text-sm font-normal flex flex-col smMd:flex-row">
               <button

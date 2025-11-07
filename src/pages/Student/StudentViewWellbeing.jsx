@@ -34,7 +34,7 @@ export default function StudentViewWellbeing() {
           {/* Heading and Buttons Div  */}
           <div className="flex flex-row justify-between px-10 pt-10 pb-4">
             {/* Name and Image div  */}
-            <p className="text-lg font-medium">All Wellbeing signposting</p>
+            <p className="text-lg font-medium">Wellbeing Signposting</p>
           </div>
           {loading ? (
             <div className="flex w-full h-40 justify-center font-normal items-center">

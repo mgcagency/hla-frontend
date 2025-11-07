@@ -56,7 +56,7 @@ const handleUpdateClick = async () => {
     selectedLocation.name === "Learning Pack"
 
   ) {
-    offsiteAddressData = selectedLocation.inputArea; // or whatever field you're using
+    offsiteAddressData = selectedLocation.inputArea ?? selectedLocation.name ; // or whatever field you're using
   }
   const updatedClass = {
     title,
