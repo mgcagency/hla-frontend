@@ -34,7 +34,7 @@ export default function StudentViewWellbeing() {
           {/* Heading and Buttons Div  */}
           <div className="flex flex-row justify-between px-10 pt-10 pb-4">
             {/* Name and Image div  */}
-            <p className="text-lg font-medium">All Well Beings</p>
+            <p className="text-lg font-medium">Wellbeing Signposting</p>
           </div>
           {loading ? (
             <div className="flex w-full h-40 justify-center font-normal items-center">
@@ -42,7 +42,7 @@ export default function StudentViewWellbeing() {
             </div>
           ) : wellbeings?.length === 0 ? (
             <div className="flex w-full h-40 justify-center font-normal items-center">
-              <p>No wellbeings created</p>
+              <p>No Wellbeing signposting created</p>
             </div>
           ) : (
             <div className="px-10 items-stretch flex flex-col mdLg:grid mdLg:grid-cols-2 xl:grid-cols-3 gap-2 gap-y-4">

@@ -81,31 +81,31 @@ export default function ViewStudentProfile() {
         totalPresents++;
       }
 
-      if (item?.review_id.question[3].a == "Working Towards") {
+      if (item?.review_id?.question?.[3]?.a  == "Working Towards") {
         objectives.workingTowards = objectives.workingTowards + 1;
       }
 
-      if (item?.review_id.question[3].a == "No") {
+      if (item?.review_id?.question[3].a == "No") {
         objectives.no = objectives.no + 1;
       }
 
-      if (item?.review_id.question[3].a == "Hit") {
+      if (item?.review_id?.question[3].a == "Hit") {
         objectives.hit = objectives.hit + 1;
       }
 
-      if (item?.review_id.question[3].a == "Exceeded") {
+      if (item?.review_id?.question[3].a == "Exceeded") {
         objectives.exceeded = objectives.exceeded + 1;
       }
 
-      if (item?.review_id.question[1].a == "Paritally") {
+      if (item?.review_id?.question[1].a == "Paritally") {
         engagement.partially = engagement.partially + 1;
       }
 
-      if (item?.review_id.question[1].a == "Fully") {
+      if (item?.review_id?.question[1].a == "Fully") {
         engagement.fully = engagement.fully + 1;
       }
 
-      if (item?.review_id.question[1].a == "Not At All") {
+      if (item?.review_id?.question[1].a == "Not At All") {
         engagement.notAtAll = engagement.notAtAll + 1;
       }
     });
@@ -251,8 +251,8 @@ export default function ViewStudentProfile() {
                 <div className="flex flex-col items-center">
                   <img
                   id="profilePic"
-                    src={IMAGES.default_profile}
-                    // src={location?.state?.student?.photo || IMAGES.avatar}
+                    // src={IMAGES.default_profile}
+                    src={location?.state?.student?.photo || IMAGES.avatar}
                     alt="Student Pic"
                     className="w-20 h-20 rounded-full mb-1 border border-black"
                   />
@@ -389,7 +389,7 @@ export default function ViewStudentProfile() {
         </div>
         {editModal && (
           <EditStudent
-            student={location?.state}
+            student={location?.state.student}
             toggleFunc={toggleEditModal}
             editedPopup={editedPopup}
             toggleEditedPopup={toggleEditedPopup}
