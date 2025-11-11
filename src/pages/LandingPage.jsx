@@ -34,8 +34,8 @@ export default function LandingPage() {
         {/* Left Div */}
         <div className="flex-1 lg:ml-20 flex flex-col items-center justify-center lg:items-start custom_size:items-center p-4 lg:p-0">
           <div className="flex-1 flex flex-col items-center md:items-center lg:items-start text-white text-2xl font-semibold lg:text-4xl mb-8 lg:mb-2 mt-10">
-            <p>Select a Category</p>
-            <p>to Begin</p>
+            {/* <p>Select a Category</p>
+            <p>to Begin</p> */}
           </div>
 
           <div className="flex-[3] grid grid-cols-2 gap-x-4 md:grid-cols-2 lg:grid-cols-2">
