@@ -77,11 +77,11 @@ const AttendanceChart = ({ data, ispdf }) => {
           <div className="text-sm">
             <div className="flex gap-1 items-center">
               <div className="h-2 w-2 min-w-2 min-h-2 rounded-full bg-[#63ABFD]" />
-              <p> Presents</p>
+              <p> Present</p>
             </div>
             <div className="flex gap-1 items-center">
               <div className="h-2 w-2 min-w-2 min-h-2 rounded-full bg-[#E697FF]" />
-              <p>Absents</p>
+              <p>Absent</p>
             </div>
           </div>
         </div>

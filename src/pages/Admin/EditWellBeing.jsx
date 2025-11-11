@@ -48,7 +48,7 @@ export default function EditWellBeing() {
         <div className="font-sans text-customGray p-6 ">
           <ToastContainer position="bottom-right" />
           <p className="text-customDarkBlue font-medium text-xl mb-4">
-            Update Well Being
+            Update Wellbeing signposting
           </p>
           <div className="mb-5">
             <p className="text-customLightGray mb-1 text-sm">Title</p>
@@ -57,7 +57,7 @@ export default function EditWellBeing() {
               required
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="Enter Well Being Title"
+              placeholder="Wellbeing signposting Title"
               maxLength={35}
               className="w-8/12 md:w-7/12 lg:w-6/12 xl:w-5/12 px-4 py-2 text-sm border border-gray-300 rounded-md shadow-md focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-500"
             />
@@ -68,7 +68,7 @@ export default function EditWellBeing() {
               required
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              placeholder="Enter Well Being Content"
+              placeholder="Wellbeing signposting Content"
               className="w-full px-4 py-2 text-sm border border-gray-300 rounded-md shadow-md focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-500"
               rows="13"
             ></textarea>
