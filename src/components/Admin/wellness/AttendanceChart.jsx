@@ -32,7 +32,7 @@ const AttendanceChart = () => {
 //     },
 //     // subtitles: [
 //     //   {
-//     //     text: `${presentCount}  Presents       ${absentCount}  Absents`, // Combine subtitle text
+//     //     text: `${presentCount}  Presents       ${absentCount}  Absent`, // Combine subtitle text
 //     //     fontSize: 14,
 //     //     fontColor: "#414652",
 //     //     fontFamily: "Arial, sans-serif",
